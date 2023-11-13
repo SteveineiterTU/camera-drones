@@ -2,6 +2,15 @@
 
 ## Commands from Lecutre:
 - rqt_bag /\<bag name> (to inspect bags)
+  
+### Byobu
+- shift + F1 help
+- shift + arrows navigate through window
+- alt + arrows naviaget through workspaces
+- alt + shift + arrows change shape of split
+- F2 new window
+- shift + F2 horizontal split
+- ctrl + F2 vertical split
 
 ## From my Udemy Course:
 ### Ros commands:
@@ -40,7 +49,6 @@
   - play \<name of rosbag>
 
 
-
 ### Good practices:
 - ask yourself if a topic needs to be asynchon or not
 - Services often used for calculaitons or to quickly call an action
@@ -50,11 +58,4 @@
 - Have a seperate package for launch files (to avoid depenency mess)
 
 
-### Byobu
-- shift + F1 help
-- shift + arrows navigate through window
-- alt + arrows naviaget through workspaces
-- alt + shift + arrows change shape of split
-- F2 new window
-- shift + F2 horizontal split
-- ctrl + F2 vertical split
+
