@@ -6,3 +6,5 @@
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
 subdirs("assignment_1")
+subdirs("octomap_mapping/octomap_mapping")
+subdirs("octomap_mapping/octomap_server")

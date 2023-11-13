@@ -7,6 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PKG_CONFIG_PATH='/opt/ros/melodic/lib/pkgconfig'
 export PWD='/home/student/camera-drones/catkin_ws/build'
-export PYTHONPATH='/opt/ros/melodic/lib/python2.7/dist-packages'
