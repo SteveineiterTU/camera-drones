@@ -1,0 +1,3 @@
+<launch>
+	<node pkg="rosbag" type="play" name="rosbag_player" output="screen" args="--clock --rate=1.00 $(find msckf_vio)/../../bags/fla_wg_175.bag"/>
+</launch>

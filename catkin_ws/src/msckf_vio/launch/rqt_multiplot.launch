@@ -1,0 +1,5 @@
+
+<launch>
+        <node pkg="rqt_multiplot" type="rqt_multiplot" name="rqt_multiplot" output="screen" args="--multiplot-config $(find msckf_vio)/rviz/rqt_multiplot_msckf_vio.xml --multiplot-run-all"/>
+</launch>
+
