@@ -12,6 +12,9 @@
 - shift + F2 horizontal split
 - ctrl + F2 vertical split
 
+#### Byobu Scripts:
+The number (eg ${SESSION_NAME}1.1) refers to the window and sub window. So this is not a hirachy insinde of the script but it means in session take the 1. window, and the split in slot 1 (you can see those if you move around in a window)
+
 ## From my Udemy Course:
 ### Ros commands:
 - catkin_make

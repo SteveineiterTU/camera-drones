@@ -1,0 +1,12 @@
+in rviz:
+  - Use tf for the position of drone (change global options fixed frame to world)
+  - Use PointCloud2 and camera/depth/points as topic (gained through astra_camera)
+  - Use MarkerArray with occupied_cells_vis_array (gained through octomap_mapping)
+
+Rest simple use the sh. After running the shellscript / bag is done we can call 'rosrun octomap_server octomap_saver -f {filename}.bt' to save it and 'rosrun octomap_server octomap_server_node {filename}.bt' to load it.
+
+
+==================================================================================================
+If struggles that some dependenies are missing with octomap_server: https://answers.ros.org/question/248242/cmake-could-not-find-octomap_ros-when-run-catkin_make/ 6 upvote answer. But use melodic instead of indigo, eg: ros-melodic-octomap
+
+also see: https://www.youtube.com/watch?v=dF2mlKJqkUg
