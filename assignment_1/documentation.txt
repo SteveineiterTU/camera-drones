@@ -8,5 +8,6 @@ Rest simple use the sh. After running the shellscript / bag is done we can call 
 
 ==================================================================================================
 If struggles that some dependenies are missing with octomap_server: https://answers.ros.org/question/248242/cmake-could-not-find-octomap_ros-when-run-catkin_make/ 6 upvote answer. But use melodic instead of indigo, eg: ros-melodic-octomap
+sudo apt-get install ros-melodic-octomap ros-melodic-octomap-mapping ros-melodic-octomap-msgs ros-melodic-octomap-ros ros-melodic-octomap-rviz-plugins ros-melodic-octomap-server
 
 also see: https://www.youtube.com/watch?v=dF2mlKJqkUg
