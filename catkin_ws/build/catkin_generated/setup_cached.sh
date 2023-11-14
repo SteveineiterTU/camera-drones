@@ -8,3 +8,4 @@
 
 # modified environment variables
 export PWD='/home/student/camera-drones/catkin_ws/build'
+export ROS_PACKAGE_PATH='/home/student/catkin_ws/src:/home/student/camera-drones/catkin_ws/src:/home/student/catkin_ws/src:/opt/ros/melodic/share'

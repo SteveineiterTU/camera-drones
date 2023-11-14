@@ -1,0 +1,51 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // catkin debug
+        //   see: A Decent Integration of VSCode to ROS, by Tahsincan Kose, Dec 18, 2018
+        //        https://medium.com/@tahsincankose/a-decent-integration-of-vscode-to-ros-4c1d951c982a
+        {
+            "name": "(gdb) Launch talker",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/../devel/.private/roscpp_tutorials/lib/roscpp_tutorials/talker",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/..",
+            "environment": [],
+            "console": "integratedTerminal",
+            "preLaunchTask": "catkin_prerun",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "(gdb) Launch listener",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/../devel/.private/roscpp_tutorials/lib/roscpp_tutorials/listener",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/..",
+            "environment": [],
+            "console": "integratedTerminal",
+            "preLaunchTask": "catkin_prerun",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

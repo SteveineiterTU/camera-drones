@@ -1,2 +1,2 @@
-assignment_1:octomap_mapping/octomap_mapping:octomap_mapping/octomap_server
+astra_camera:msckf_vio:octomap_mapping/octomap_mapping:octomap_mapping/octomap_server:random_numbers:ros_tutorials/ros_tutorials:ros_tutorials/roscpp_tutorials:ros_tutorials/rospy_tutorials:ros_tutorials/turtlesim
 -DCATKIN_DEVEL_PREFIX=/home/student/camera-drones/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/student/camera-drones/catkin_ws/install -G Unix Makefiles

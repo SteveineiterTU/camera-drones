@@ -1,0 +1,4 @@
+Symlinking /home/student/catkin_ws/devel/lib/librandom_numbers.so
+Symlinking /home/student/catkin_ws/devel/lib/pkgconfig/random_numbers.pc
+Symlinking /home/student/catkin_ws/devel/share/random_numbers/cmake/random_numbersConfig.cmake
+Symlinking /home/student/catkin_ws/devel/share/random_numbers/cmake/random_numbersConfig-version.cmake

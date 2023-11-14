@@ -56,6 +56,39 @@ CMAKE_BINARY_DIR = /home/student/camera-drones/catkin_ws/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -80,39 +113,6 @@ install/local/fast: preinstall/fast
 	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -124,16 +124,16 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
 
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
+# Special rule for the target test
+test/fast: test
 
-.PHONY : edit_cache/fast
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -183,19 +183,34 @@ octomap_saver/fast:
 .PHONY : octomap_saver/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/rule
 
 # Convenience name for target.
-octomap_server_multilayer: octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/rule
+octomap_color_server_nodelet: octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/rule
 
-.PHONY : octomap_server_multilayer
+.PHONY : octomap_color_server_nodelet
 
 # fast build rule for target.
-octomap_server_multilayer/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/build
-.PHONY : octomap_server_multilayer/fast
+octomap_color_server_nodelet/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/build
+.PHONY : octomap_color_server_nodelet/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/rule
+
+# Convenience name for target.
+octomap_server_static: octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/rule
+
+.PHONY : octomap_server_static
+
+# fast build rule for target.
+octomap_server_static/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/build
+.PHONY : octomap_server_static/fast
 
 # Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_node.dir/rule:
@@ -211,6 +226,21 @@ octomap_color_server_node: octomap_mapping/octomap_server/CMakeFiles/octomap_col
 octomap_color_server_node/fast:
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_node.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_node.dir/build
 .PHONY : octomap_color_server_node/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/rule
+
+# Convenience name for target.
+octomap_server_multilayer: octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/rule
+
+.PHONY : octomap_server_multilayer
+
+# fast build rule for target.
+octomap_server_multilayer/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_multilayer.dir/build
+.PHONY : octomap_server_multilayer/fast
 
 # Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/octomap_server_color.dir/rule:
@@ -243,501 +273,6 @@ octomap_server/fast:
 .PHONY : octomap_server/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/rule
-
-# Convenience name for target.
-octomap_server_gencfg: octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/rule
-
-.PHONY : octomap_server_gencfg
-
-# fast build rule for target.
-octomap_server_gencfg/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/build
-.PHONY : octomap_server_gencfg/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-octomap_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/rule
-
-.PHONY : octomap_msgs_generate_messages_eus
-
-# fast build rule for target.
-octomap_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/build
-.PHONY : octomap_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-octomap_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : octomap_msgs_generate_messages_cpp
-
-# fast build rule for target.
-octomap_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/build
-.PHONY : octomap_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-nav_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : nav_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-nav_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build
-.PHONY : nav_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-tf2_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/build
-.PHONY : tf2_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_cpp
-
-# fast build rule for target.
-tf2_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/build
-.PHONY : tf2_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_cpp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-topic_tools_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
-
-.PHONY : topic_tools_generate_messages_cpp
-
-# fast build rule for target.
-topic_tools_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/build
-.PHONY : topic_tools_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-dynamic_reconfigure_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/rule
-
-.PHONY : dynamic_reconfigure_generate_messages_cpp
-
-# fast build rule for target.
-dynamic_reconfigure_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_cpp.dir/build
-.PHONY : dynamic_reconfigure_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/rule
-
-.PHONY : tf_generate_messages_py
-
-# fast build rule for target.
-tf_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/build
-.PHONY : tf_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-sensor_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build
-.PHONY : sensor_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_cpp.dir/rule
-
-.PHONY : roscpp_generate_messages_cpp
-
-# fast build rule for target.
-roscpp_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_cpp.dir/build
-.PHONY : roscpp_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-actionlib_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
-
-.PHONY : actionlib_generate_messages_cpp
-
-# fast build rule for target.
-actionlib_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/build
-.PHONY : actionlib_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-nav_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : nav_msgs_generate_messages_cpp
-
-# fast build rule for target.
-nav_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/build
-.PHONY : nav_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_lisp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
-.PHONY : sensor_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_py.dir/rule
-
-# Convenience name for target.
-dynamic_reconfigure_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_py.dir/rule
-
-.PHONY : dynamic_reconfigure_generate_messages_py
-
-# fast build rule for target.
-dynamic_reconfigure_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_py.dir/build
-.PHONY : dynamic_reconfigure_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_py.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_py
-
-# fast build rule for target.
-geometry_msgs_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_py.dir/build
-.PHONY : geometry_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_lisp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_lisp.dir/build
-.PHONY : geometry_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-visualization_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
-
-.PHONY : visualization_msgs_generate_messages_py
-
-# fast build rule for target.
-visualization_msgs_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/build
-.PHONY : visualization_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-dynamic_reconfigure_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_nodejs.dir/rule
-
-.PHONY : dynamic_reconfigure_generate_messages_nodejs
-
-# fast build rule for target.
-dynamic_reconfigure_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_nodejs.dir/build
-.PHONY : dynamic_reconfigure_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/rule
-
-# Convenience name for target.
-pcl_ros_gencfg: octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/rule
-
-.PHONY : pcl_ros_gencfg
-
-# fast build rule for target.
-pcl_ros_gencfg/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/build.make octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/build
-.PHONY : pcl_ros_gencfg/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-topic_tools_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/rule
-
-.PHONY : topic_tools_generate_messages_nodejs
-
-# fast build rule for target.
-topic_tools_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/build
-.PHONY : topic_tools_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_py
-
-# fast build rule for target.
-tf2_msgs_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/build
-.PHONY : tf2_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/rule
-
-# Convenience name for target.
-actionlib_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/rule
-
-.PHONY : actionlib_generate_messages_py
-
-# fast build rule for target.
-actionlib_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/build
-.PHONY : actionlib_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-visualization_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : visualization_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-visualization_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/build
-.PHONY : visualization_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : std_msgs_generate_messages_cpp
-
-# fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_py
-
-# fast build rule for target.
-sensor_msgs_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
-.PHONY : sensor_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_py.dir/rule
-
-# Convenience name for target.
-nodelet_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_py.dir/rule
-
-.PHONY : nodelet_generate_messages_py
-
-# fast build rule for target.
-nodelet_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_py.dir/build
-.PHONY : nodelet_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-visualization_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
-
-.PHONY : visualization_msgs_generate_messages_eus
-
-# fast build rule for target.
-visualization_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/build
-.PHONY : visualization_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_eus.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_eus
-
-# fast build rule for target.
-geometry_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_eus.dir/build
-.PHONY : geometry_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/rule
-
-# Convenience name for target.
-octomap_server_static: octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/rule
-
-.PHONY : octomap_server_static
-
-# fast build rule for target.
-octomap_server_static/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_static.dir/build
-.PHONY : octomap_server_static/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_py.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_py.dir/rule
-
-.PHONY : roscpp_generate_messages_py
-
-# fast build rule for target.
-roscpp_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_py.dir/build
-.PHONY : roscpp_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-geometry_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir/build
-.PHONY : geometry_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_lisp.dir/rule:
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_lisp.dir/rule
 .PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_lisp.dir/rule
@@ -751,336 +286,6 @@ octomap_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/o
 octomap_msgs_generate_messages_lisp/fast:
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_lisp.dir/build
 .PHONY : octomap_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-std_srvs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
-
-.PHONY : std_srvs_generate_messages_eus
-
-# fast build rule for target.
-std_srvs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/build
-.PHONY : std_srvs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
-
-.PHONY : roscpp_generate_messages_lisp
-
-# fast build rule for target.
-roscpp_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_lisp.dir/build
-.PHONY : roscpp_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-bond_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_eus.dir/rule
-
-.PHONY : bond_generate_messages_eus
-
-# fast build rule for target.
-bond_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_eus.dir/build
-.PHONY : bond_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_eus
-
-# fast build rule for target.
-sensor_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
-.PHONY : sensor_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_cpp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
-.PHONY : sensor_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/rule
-
-# Convenience name for target.
-octomap_server_nodelet: octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/rule
-
-.PHONY : octomap_server_nodelet
-
-# fast build rule for target.
-octomap_server_nodelet/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build
-.PHONY : octomap_server_nodelet/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_nodejs.dir/rule
-
-.PHONY : roscpp_generate_messages_nodejs
-
-# fast build rule for target.
-roscpp_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_nodejs.dir/build
-.PHONY : roscpp_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : std_msgs_generate_messages_lisp
-
-# fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_eus
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_eus.dir/build
-.PHONY : rosgraph_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_lisp
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
-.PHONY : rosgraph_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-dynamic_reconfigure_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_lisp.dir/rule
-
-.PHONY : dynamic_reconfigure_generate_messages_lisp
-
-# fast build rule for target.
-dynamic_reconfigure_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_lisp.dir/build
-.PHONY : dynamic_reconfigure_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-pcl_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : pcl_msgs_generate_messages_cpp
-
-# fast build rule for target.
-pcl_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/build
-.PHONY : pcl_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-nav_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule
-
-.PHONY : nav_msgs_generate_messages_eus
-
-# fast build rule for target.
-nav_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/build
-.PHONY : nav_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_eus
-
-# fast build rule for target.
-tf2_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/build
-.PHONY : tf2_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-visualization_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : visualization_msgs_generate_messages_cpp
-
-# fast build rule for target.
-visualization_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/build
-.PHONY : visualization_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_nodejs.dir/build
-.PHONY : rosgraph_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-visualization_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : visualization_msgs_generate_messages_lisp
-
-# fast build rule for target.
-visualization_msgs_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/build
-.PHONY : visualization_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
-
-.PHONY : std_msgs_generate_messages_eus
-
-# fast build rule for target.
-std_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_eus.dir/build
-.PHONY : std_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-dynamic_reconfigure_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_eus.dir/rule
-
-.PHONY : dynamic_reconfigure_generate_messages_eus
-
-# fast build rule for target.
-dynamic_reconfigure_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_generate_messages_eus.dir/build
-.PHONY : dynamic_reconfigure_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : std_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-std_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
-.PHONY : std_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-bond_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_lisp.dir/rule
-
-.PHONY : bond_generate_messages_lisp
-
-# fast build rule for target.
-bond_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_lisp.dir/build
-.PHONY : bond_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-std_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_py.dir/rule
-
-.PHONY : std_msgs_generate_messages_py
-
-# fast build rule for target.
-std_msgs_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_msgs_generate_messages_py.dir/build
-.PHONY : std_msgs_generate_messages_py/fast
 
 # Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_py.dir/rule:
@@ -1098,214 +303,19 @@ nav_msgs_generate_messages_py/fast:
 .PHONY : nav_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-tf2_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
+nav_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : tf2_msgs_generate_messages_lisp
+.PHONY : nav_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-tf2_msgs_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build
-.PHONY : tf2_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_gencfg.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_gencfg.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_gencfg.dir/rule
-
-# Convenience name for target.
-dynamic_reconfigure_gencfg: octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_gencfg.dir/rule
-
-.PHONY : dynamic_reconfigure_gencfg
-
-# fast build rule for target.
-dynamic_reconfigure_gencfg/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_gencfg.dir/build.make octomap_mapping/octomap_server/CMakeFiles/dynamic_reconfigure_gencfg.dir/build
-.PHONY : dynamic_reconfigure_gencfg/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-nodelet_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_cpp.dir/rule
-
-.PHONY : nodelet_generate_messages_cpp
-
-# fast build rule for target.
-nodelet_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_cpp.dir/build
-.PHONY : nodelet_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_py.dir/rule
-
-# Convenience name for target.
-bond_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_py.dir/rule
-
-.PHONY : bond_generate_messages_py
-
-# fast build rule for target.
-bond_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_py.dir/build
-.PHONY : bond_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-octomap_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : octomap_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-octomap_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/build
-.PHONY : octomap_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-std_srvs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
-
-.PHONY : std_srvs_generate_messages_nodejs
-
-# fast build rule for target.
-std_srvs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build
-.PHONY : std_srvs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-geometry_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : geometry_msgs_generate_messages_cpp
-
-# fast build rule for target.
-geometry_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/build
-.PHONY : geometry_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-actionlib_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
-
-.PHONY : actionlib_generate_messages_lisp
-
-# fast build rule for target.
-actionlib_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/build
-.PHONY : actionlib_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-nodelet_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_eus.dir/rule
-
-.PHONY : nodelet_generate_messages_eus
-
-# fast build rule for target.
-nodelet_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_eus.dir/build
-.PHONY : nodelet_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-nodelet_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_lisp.dir/rule
-
-.PHONY : nodelet_generate_messages_lisp
-
-# fast build rule for target.
-nodelet_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_lisp.dir/build
-.PHONY : nodelet_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-roscpp_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_eus.dir/rule
-
-.PHONY : roscpp_generate_messages_eus
-
-# fast build rule for target.
-roscpp_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/roscpp_generate_messages_eus.dir/build
-.PHONY : roscpp_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-rosgraph_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/rule
-
-.PHONY : rosgraph_msgs_generate_messages_py
-
-# fast build rule for target.
-rosgraph_msgs_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/rosgraph_msgs_generate_messages_py.dir/build
-.PHONY : rosgraph_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-actionlib_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/rule
-
-.PHONY : actionlib_msgs_generate_messages_eus
-
-# fast build rule for target.
-actionlib_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/build
-.PHONY : actionlib_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-nodelet_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_nodejs.dir/rule
-
-.PHONY : nodelet_generate_messages_nodejs
-
-# fast build rule for target.
-nodelet_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nodelet_generate_messages_nodejs.dir/build
-.PHONY : nodelet_generate_messages_nodejs/fast
+nav_msgs_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_nodejs.dir/build
+.PHONY : nav_msgs_generate_messages_nodejs/fast
 
 # Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_lisp.dir/rule:
@@ -1323,229 +333,139 @@ nav_msgs_generate_messages_lisp/fast:
 .PHONY : nav_msgs_generate_messages_lisp/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule
 
 # Convenience name for target.
-pcl_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/rule
+nav_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/rule
 
-.PHONY : pcl_msgs_generate_messages_nodejs
+.PHONY : nav_msgs_generate_messages_eus
 
 # fast build rule for target.
-pcl_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/build
-.PHONY : pcl_msgs_generate_messages_nodejs/fast
+nav_msgs_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_eus.dir/build
+.PHONY : nav_msgs_generate_messages_eus/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_cpp.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-bond_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_cpp.dir/rule
+nav_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/rule
 
-.PHONY : bond_generate_messages_cpp
+.PHONY : nav_msgs_generate_messages_cpp
 
 # fast build rule for target.
-bond_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_cpp.dir/build
-.PHONY : bond_generate_messages_cpp/fast
+nav_msgs_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nav_msgs_generate_messages_cpp.dir/build
+.PHONY : nav_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-octomap_tracking_server_node: octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/rule
+tf2_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : octomap_tracking_server_node
+.PHONY : tf2_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-octomap_tracking_server_node/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/build
-.PHONY : octomap_tracking_server_node/fast
+tf2_msgs_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/build
+.PHONY : tf2_msgs_generate_messages_nodejs/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_nodejs.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-bond_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_nodejs.dir/rule
+octomap_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : bond_generate_messages_nodejs
+.PHONY : octomap_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-bond_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/bond_generate_messages_nodejs.dir/build
-.PHONY : bond_generate_messages_nodejs/fast
+octomap_msgs_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_nodejs.dir/build
+.PHONY : octomap_msgs_generate_messages_nodejs/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-octomap_color_server_nodelet: octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/rule
+tf2_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
 
-.PHONY : octomap_color_server_nodelet
+.PHONY : tf2_msgs_generate_messages_py
 
 # fast build rule for target.
-octomap_color_server_nodelet/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/build
-.PHONY : octomap_color_server_nodelet/fast
+tf2_msgs_generate_messages_py/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_py.dir/build
+.PHONY : tf2_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+tf2_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
 
-.PHONY : std_srvs_generate_messages_lisp
+.PHONY : tf2_msgs_generate_messages_lisp
 
 # fast build rule for target.
-std_srvs_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/build
-.PHONY : std_srvs_generate_messages_lisp/fast
+tf2_msgs_generate_messages_lisp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build
+.PHONY : tf2_msgs_generate_messages_lisp/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
 
 # Convenience name for target.
-topic_tools_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
+tf2_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
 
-.PHONY : topic_tools_generate_messages_lisp
+.PHONY : tf2_msgs_generate_messages_eus
 
 # fast build rule for target.
-topic_tools_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/build
-.PHONY : topic_tools_generate_messages_lisp/fast
+tf2_msgs_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_eus.dir/build
+.PHONY : tf2_msgs_generate_messages_eus/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-pcl_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/rule
+tf2_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
 
-.PHONY : pcl_msgs_generate_messages_eus
+.PHONY : tf2_msgs_generate_messages_cpp
 
 # fast build rule for target.
-pcl_msgs_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/build
-.PHONY : pcl_msgs_generate_messages_eus/fast
+tf2_msgs_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/build
+.PHONY : tf2_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-topic_tools_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/rule
+actionlib_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
 
-.PHONY : topic_tools_generate_messages_eus
+.PHONY : actionlib_msgs_generate_messages_py
 
 # fast build rule for target.
-topic_tools_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/build
-.PHONY : topic_tools_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_srvs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
-
-.PHONY : std_srvs_generate_messages_cpp
-
-# fast build rule for target.
-std_srvs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/build
-.PHONY : std_srvs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/rule
-
-.PHONY : tf_generate_messages_eus
-
-# fast build rule for target.
-tf_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/build
-.PHONY : tf_generate_messages_eus/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-actionlib_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : actionlib_msgs_generate_messages_cpp
-
-# fast build rule for target.
-actionlib_msgs_generate_messages_cpp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/build
-.PHONY : actionlib_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-std_srvs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/rule
-
-.PHONY : std_srvs_generate_messages_py
-
-# fast build rule for target.
-std_srvs_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/build
-.PHONY : std_srvs_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/rule
-
-.PHONY : tf_generate_messages_lisp
-
-# fast build rule for target.
-tf_generate_messages_lisp/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/build
-.PHONY : tf_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/rule
-
-# Convenience name for target.
-octomap_server_node: octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/rule
-
-.PHONY : octomap_server_node
-
-# fast build rule for target.
-octomap_server_node/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/build
-.PHONY : octomap_server_node/fast
+actionlib_msgs_generate_messages_py/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/build
+.PHONY : actionlib_msgs_generate_messages_py/fast
 
 # Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_py.dir/rule:
@@ -1563,19 +483,49 @@ octomap_msgs_generate_messages_py/fast:
 .PHONY : octomap_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/rule
 
 # Convenience name for target.
-tf_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/rule
+tf_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/rule
 
-.PHONY : tf_generate_messages_nodejs
+.PHONY : tf_generate_messages_eus
 
 # fast build rule for target.
-tf_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/build
-.PHONY : tf_generate_messages_nodejs/fast
+tf_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_eus.dir/build
+.PHONY : tf_generate_messages_eus/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+std_srvs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
+
+.PHONY : std_srvs_generate_messages_cpp
+
+# fast build rule for target.
+std_srvs_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_cpp.dir/build
+.PHONY : std_srvs_generate_messages_cpp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+actionlib_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : actionlib_msgs_generate_messages_cpp
+
+# fast build rule for target.
+actionlib_msgs_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/build
+.PHONY : actionlib_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_py.dir/rule:
@@ -1593,19 +543,274 @@ pcl_msgs_generate_messages_py/fast:
 .PHONY : pcl_msgs_generate_messages_py/fast
 
 # Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/rule
+octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
 
 # Convenience name for target.
-actionlib_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/rule
+std_srvs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
 
-.PHONY : actionlib_generate_messages_eus
+.PHONY : std_srvs_generate_messages_eus
 
 # fast build rule for target.
-actionlib_generate_messages_eus/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/build
-.PHONY : actionlib_generate_messages_eus/fast
+std_srvs_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_eus.dir/build
+.PHONY : std_srvs_generate_messages_eus/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+pcl_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : pcl_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+pcl_msgs_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_nodejs.dir/build
+.PHONY : pcl_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+tf_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/rule
+
+.PHONY : tf_generate_messages_nodejs
+
+# fast build rule for target.
+tf_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_nodejs.dir/build
+.PHONY : tf_generate_messages_nodejs/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/rule
+
+# Convenience name for target.
+octomap_tracking_server_node: octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/rule
+
+.PHONY : octomap_tracking_server_node
+
+# fast build rule for target.
+octomap_tracking_server_node/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_tracking_server_node.dir/build
+.PHONY : octomap_tracking_server_node/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/rule
+
+# Convenience name for target.
+tf_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/rule
+
+.PHONY : tf_generate_messages_py
+
+# fast build rule for target.
+tf_generate_messages_py/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_py.dir/build
+.PHONY : tf_generate_messages_py/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+actionlib_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : actionlib_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+actionlib_msgs_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/build
+.PHONY : actionlib_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+pcl_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : pcl_msgs_generate_messages_cpp
+
+# fast build rule for target.
+pcl_msgs_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_cpp.dir/build
+.PHONY : pcl_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/rule
+
+# Convenience name for target.
+octomap_server_node: octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/rule
+
+.PHONY : octomap_server_node
+
+# fast build rule for target.
+octomap_server_node/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_node.dir/build
+.PHONY : octomap_server_node/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+pcl_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/rule
+
+.PHONY : pcl_msgs_generate_messages_eus
+
+# fast build rule for target.
+pcl_msgs_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_eus.dir/build
+.PHONY : pcl_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+visualization_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/rule
+
+.PHONY : visualization_msgs_generate_messages_eus
+
+# fast build rule for target.
+visualization_msgs_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_eus.dir/build
+.PHONY : visualization_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+octomap_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : octomap_msgs_generate_messages_cpp
+
+# fast build rule for target.
+octomap_msgs_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_cpp.dir/build
+.PHONY : octomap_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+actionlib_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/rule
+
+.PHONY : actionlib_msgs_generate_messages_eus
+
+# fast build rule for target.
+actionlib_msgs_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_eus.dir/build
+.PHONY : actionlib_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+visualization_msgs_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/rule
+
+.PHONY : visualization_msgs_generate_messages_cpp
+
+# fast build rule for target.
+visualization_msgs_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_cpp.dir/build
+.PHONY : visualization_msgs_generate_messages_cpp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+visualization_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/rule
+
+.PHONY : visualization_msgs_generate_messages_py
+
+# fast build rule for target.
+visualization_msgs_generate_messages_py/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_py.dir/build
+.PHONY : visualization_msgs_generate_messages_py/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+visualization_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/rule
+
+.PHONY : visualization_msgs_generate_messages_lisp
+
+# fast build rule for target.
+visualization_msgs_generate_messages_lisp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_lisp.dir/build
+.PHONY : visualization_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+visualization_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/rule
+
+.PHONY : visualization_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+visualization_msgs_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/visualization_msgs_generate_messages_nodejs.dir/build
+.PHONY : visualization_msgs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+std_srvs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/rule
+
+.PHONY : std_srvs_generate_messages_py
+
+# fast build rule for target.
+std_srvs_generate_messages_py/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_py.dir/build
+.PHONY : std_srvs_generate_messages_py/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+topic_tools_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/rule
+
+.PHONY : topic_tools_generate_messages_cpp
+
+# fast build rule for target.
+topic_tools_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_cpp.dir/build
+.PHONY : topic_tools_generate_messages_cpp/fast
 
 # Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/pcl_msgs_generate_messages_lisp.dir/rule:
@@ -1623,6 +828,186 @@ pcl_msgs_generate_messages_lisp/fast:
 .PHONY : pcl_msgs_generate_messages_lisp/fast
 
 # Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+topic_tools_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/rule
+
+.PHONY : topic_tools_generate_messages_eus
+
+# fast build rule for target.
+topic_tools_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_eus.dir/build
+.PHONY : topic_tools_generate_messages_eus/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/rule
+
+# Convenience name for target.
+octomap_server_gencfg: octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/rule
+
+.PHONY : octomap_server_gencfg
+
+# fast build rule for target.
+octomap_server_gencfg/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_gencfg.dir/build
+.PHONY : octomap_server_gencfg/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+std_srvs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+
+.PHONY : std_srvs_generate_messages_lisp
+
+# fast build rule for target.
+std_srvs_generate_messages_lisp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_lisp.dir/build
+.PHONY : std_srvs_generate_messages_lisp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/rule
+
+# Convenience name for target.
+nodelet_topic_tools_gencfg: octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/rule
+
+.PHONY : nodelet_topic_tools_gencfg
+
+# fast build rule for target.
+nodelet_topic_tools_gencfg/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/build
+.PHONY : nodelet_topic_tools_gencfg/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+topic_tools_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/rule
+
+.PHONY : topic_tools_generate_messages_lisp
+
+# fast build rule for target.
+topic_tools_generate_messages_lisp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_lisp.dir/build
+.PHONY : topic_tools_generate_messages_lisp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+std_srvs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
+
+.PHONY : std_srvs_generate_messages_nodejs
+
+# fast build rule for target.
+std_srvs_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build
+.PHONY : std_srvs_generate_messages_nodejs/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+actionlib_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/rule
+
+.PHONY : actionlib_generate_messages_lisp
+
+# fast build rule for target.
+actionlib_generate_messages_lisp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_lisp.dir/build
+.PHONY : actionlib_generate_messages_lisp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/rule
+
+# Convenience name for target.
+octomap_server_nodelet: octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/rule
+
+.PHONY : octomap_server_nodelet
+
+# fast build rule for target.
+octomap_server_nodelet/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build
+.PHONY : octomap_server_nodelet/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/rule
+
+# Convenience name for target.
+pcl_ros_gencfg: octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/rule
+
+.PHONY : pcl_ros_gencfg
+
+# fast build rule for target.
+pcl_ros_gencfg/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/build.make octomap_mapping/octomap_server/CMakeFiles/pcl_ros_gencfg.dir/build
+.PHONY : pcl_ros_gencfg/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/rule
+
+# Convenience name for target.
+actionlib_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/rule
+
+.PHONY : actionlib_generate_messages_py
+
+# fast build rule for target.
+actionlib_generate_messages_py/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_py.dir/build
+.PHONY : actionlib_generate_messages_py/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+topic_tools_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/rule
+
+.PHONY : topic_tools_generate_messages_nodejs
+
+# fast build rule for target.
+topic_tools_generate_messages_nodejs/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_nodejs.dir/build
+.PHONY : topic_tools_generate_messages_nodejs/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
+
+# Convenience name for target.
+topic_tools_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
+
+.PHONY : topic_tools_generate_messages_py
+
+# fast build rule for target.
+topic_tools_generate_messages_py/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/build
+.PHONY : topic_tools_generate_messages_py/fast
+
+# Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_cpp.dir/rule:
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_cpp.dir/rule
 .PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_cpp.dir/rule
@@ -1636,6 +1021,66 @@ tf_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/tf_generate_
 tf_generate_messages_cpp/fast:
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_cpp.dir/build
 .PHONY : tf_generate_messages_cpp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+tf_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/rule
+
+.PHONY : tf_generate_messages_lisp
+
+# fast build rule for target.
+tf_generate_messages_lisp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/tf_generate_messages_lisp.dir/build
+.PHONY : tf_generate_messages_lisp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+octomap_msgs_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/rule
+
+.PHONY : octomap_msgs_generate_messages_eus
+
+# fast build rule for target.
+octomap_msgs_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_msgs_generate_messages_eus.dir/build
+.PHONY : octomap_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+actionlib_generate_messages_cpp: octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/rule
+
+.PHONY : actionlib_generate_messages_cpp
+
+# fast build rule for target.
+actionlib_generate_messages_cpp/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_cpp.dir/build
+.PHONY : actionlib_generate_messages_cpp/fast
+
+# Convenience name for target.
+octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/rule:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/rule
+.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+actionlib_generate_messages_eus: octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/rule
+
+.PHONY : actionlib_generate_messages_eus
+
+# fast build rule for target.
+actionlib_generate_messages_eus/fast:
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_eus.dir/build
+.PHONY : actionlib_generate_messages_eus/fast
 
 # Convenience name for target.
 octomap_mapping/octomap_server/CMakeFiles/actionlib_generate_messages_nodejs.dir/rule:
@@ -1666,66 +1111,6 @@ actionlib_msgs_generate_messages_lisp: octomap_mapping/octomap_server/CMakeFiles
 actionlib_msgs_generate_messages_lisp/fast:
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_lisp.dir/build
 .PHONY : actionlib_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
-
-# Convenience name for target.
-topic_tools_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/rule
-
-.PHONY : topic_tools_generate_messages_py
-
-# fast build rule for target.
-topic_tools_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/topic_tools_generate_messages_py.dir/build
-.PHONY : topic_tools_generate_messages_py/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/rule
-
-# Convenience name for target.
-nodelet_topic_tools_gencfg: octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/rule
-
-.PHONY : nodelet_topic_tools_gencfg
-
-# fast build rule for target.
-nodelet_topic_tools_gencfg/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/build.make octomap_mapping/octomap_server/CMakeFiles/nodelet_topic_tools_gencfg.dir/build
-.PHONY : nodelet_topic_tools_gencfg/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-actionlib_msgs_generate_messages_nodejs: octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : actionlib_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-actionlib_msgs_generate_messages_nodejs/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_nodejs.dir/build
-.PHONY : actionlib_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
-.PHONY : octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-actionlib_msgs_generate_messages_py: octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/rule
-
-.PHONY : actionlib_msgs_generate_messages_py
-
-# fast build rule for target.
-actionlib_msgs_generate_messages_py/fast:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/build.make octomap_mapping/octomap_server/CMakeFiles/actionlib_msgs_generate_messages_py.dir/build
-.PHONY : actionlib_msgs_generate_messages_py/fast
 
 src/OctomapServer.o: src/OctomapServer.cpp.o
 
@@ -1907,8 +1292,8 @@ src/octomap_server_nodelet.o: src/octomap_server_nodelet.cpp.o
 
 # target to build an object file
 src/octomap_server_nodelet.cpp.o:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/src/octomap_server_nodelet.cpp.o
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/src/octomap_server_nodelet.cpp.o
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/src/octomap_server_nodelet.cpp.o
 .PHONY : src/octomap_server_nodelet.cpp.o
 
 src/octomap_server_nodelet.i: src/octomap_server_nodelet.cpp.i
@@ -1917,8 +1302,8 @@ src/octomap_server_nodelet.i: src/octomap_server_nodelet.cpp.i
 
 # target to preprocess a source file
 src/octomap_server_nodelet.cpp.i:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/src/octomap_server_nodelet.cpp.i
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/src/octomap_server_nodelet.cpp.i
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/src/octomap_server_nodelet.cpp.i
 .PHONY : src/octomap_server_nodelet.cpp.i
 
 src/octomap_server_nodelet.s: src/octomap_server_nodelet.cpp.s
@@ -1927,8 +1312,8 @@ src/octomap_server_nodelet.s: src/octomap_server_nodelet.cpp.s
 
 # target to generate assembly for a file
 src/octomap_server_nodelet.cpp.s:
-	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/src/octomap_server_nodelet.cpp.s
 	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_color_server_nodelet.dir/src/octomap_server_nodelet.cpp.s
+	cd /home/student/camera-drones/catkin_ws/build && $(MAKE) -f octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/build.make octomap_mapping/octomap_server/CMakeFiles/octomap_server_nodelet.dir/src/octomap_server_nodelet.cpp.s
 .PHONY : src/octomap_server_nodelet.cpp.s
 
 src/octomap_server_static.o: src/octomap_server_static.cpp.o
@@ -1991,117 +1376,76 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
-	@echo "... install/local"
-	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... octomap_saver"
-	@echo "... octomap_server_multilayer"
+	@echo "... octomap_color_server_nodelet"
+	@echo "... octomap_server_static"
 	@echo "... octomap_color_server_node"
+	@echo "... octomap_server_multilayer"
 	@echo "... octomap_server_color"
 	@echo "... octomap_server"
-	@echo "... octomap_server_gencfg"
-	@echo "... octomap_msgs_generate_messages_eus"
-	@echo "... octomap_msgs_generate_messages_cpp"
-	@echo "... test"
-	@echo "... nav_msgs_generate_messages_nodejs"
-	@echo "... tf2_msgs_generate_messages_nodejs"
-	@echo "... tf2_msgs_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_cpp"
-	@echo "... topic_tools_generate_messages_cpp"
-	@echo "... dynamic_reconfigure_generate_messages_cpp"
-	@echo "... tf_generate_messages_py"
-	@echo "... sensor_msgs_generate_messages_nodejs"
-	@echo "... roscpp_generate_messages_cpp"
-	@echo "... rebuild_cache"
-	@echo "... actionlib_generate_messages_cpp"
-	@echo "... nav_msgs_generate_messages_cpp"
-	@echo "... sensor_msgs_generate_messages_lisp"
-	@echo "... dynamic_reconfigure_generate_messages_py"
-	@echo "... geometry_msgs_generate_messages_py"
-	@echo "... geometry_msgs_generate_messages_lisp"
-	@echo "... visualization_msgs_generate_messages_py"
-	@echo "... dynamic_reconfigure_generate_messages_nodejs"
-	@echo "... pcl_ros_gencfg"
-	@echo "... topic_tools_generate_messages_nodejs"
-	@echo "... tf2_msgs_generate_messages_py"
-	@echo "... actionlib_generate_messages_py"
-	@echo "... visualization_msgs_generate_messages_nodejs"
-	@echo "... std_msgs_generate_messages_cpp"
-	@echo "... sensor_msgs_generate_messages_py"
-	@echo "... nodelet_generate_messages_py"
-	@echo "... visualization_msgs_generate_messages_eus"
-	@echo "... geometry_msgs_generate_messages_eus"
-	@echo "... octomap_server_static"
-	@echo "... roscpp_generate_messages_py"
-	@echo "... geometry_msgs_generate_messages_nodejs"
 	@echo "... octomap_msgs_generate_messages_lisp"
-	@echo "... std_srvs_generate_messages_eus"
-	@echo "... roscpp_generate_messages_lisp"
-	@echo "... bond_generate_messages_eus"
-	@echo "... sensor_msgs_generate_messages_eus"
-	@echo "... sensor_msgs_generate_messages_cpp"
-	@echo "... octomap_server_nodelet"
-	@echo "... roscpp_generate_messages_nodejs"
-	@echo "... std_msgs_generate_messages_lisp"
-	@echo "... rosgraph_msgs_generate_messages_eus"
-	@echo "... rosgraph_msgs_generate_messages_lisp"
-	@echo "... dynamic_reconfigure_generate_messages_lisp"
-	@echo "... pcl_msgs_generate_messages_cpp"
-	@echo "... nav_msgs_generate_messages_eus"
-	@echo "... tf2_msgs_generate_messages_eus"
-	@echo "... visualization_msgs_generate_messages_cpp"
-	@echo "... rosgraph_msgs_generate_messages_nodejs"
-	@echo "... edit_cache"
-	@echo "... visualization_msgs_generate_messages_lisp"
-	@echo "... std_msgs_generate_messages_eus"
-	@echo "... dynamic_reconfigure_generate_messages_eus"
-	@echo "... std_msgs_generate_messages_nodejs"
-	@echo "... bond_generate_messages_lisp"
-	@echo "... std_msgs_generate_messages_py"
+	@echo "... install"
 	@echo "... nav_msgs_generate_messages_py"
-	@echo "... tf2_msgs_generate_messages_lisp"
-	@echo "... dynamic_reconfigure_gencfg"
-	@echo "... nodelet_generate_messages_cpp"
-	@echo "... bond_generate_messages_py"
-	@echo "... octomap_msgs_generate_messages_nodejs"
-	@echo "... std_srvs_generate_messages_nodejs"
-	@echo "... geometry_msgs_generate_messages_cpp"
-	@echo "... actionlib_generate_messages_lisp"
-	@echo "... nodelet_generate_messages_eus"
-	@echo "... nodelet_generate_messages_lisp"
-	@echo "... roscpp_generate_messages_eus"
-	@echo "... rosgraph_msgs_generate_messages_py"
-	@echo "... actionlib_msgs_generate_messages_eus"
-	@echo "... nodelet_generate_messages_nodejs"
+	@echo "... nav_msgs_generate_messages_nodejs"
+	@echo "... edit_cache"
 	@echo "... nav_msgs_generate_messages_lisp"
-	@echo "... pcl_msgs_generate_messages_nodejs"
-	@echo "... bond_generate_messages_cpp"
-	@echo "... octomap_tracking_server_node"
-	@echo "... bond_generate_messages_nodejs"
-	@echo "... octomap_color_server_nodelet"
-	@echo "... std_srvs_generate_messages_lisp"
-	@echo "... topic_tools_generate_messages_lisp"
-	@echo "... pcl_msgs_generate_messages_eus"
-	@echo "... topic_tools_generate_messages_eus"
-	@echo "... std_srvs_generate_messages_cpp"
-	@echo "... tf_generate_messages_eus"
-	@echo "... actionlib_msgs_generate_messages_cpp"
-	@echo "... std_srvs_generate_messages_py"
-	@echo "... tf_generate_messages_lisp"
-	@echo "... octomap_server_node"
+	@echo "... nav_msgs_generate_messages_eus"
+	@echo "... nav_msgs_generate_messages_cpp"
+	@echo "... tf2_msgs_generate_messages_nodejs"
+	@echo "... install/strip"
+	@echo "... octomap_msgs_generate_messages_nodejs"
+	@echo "... tf2_msgs_generate_messages_py"
+	@echo "... tf2_msgs_generate_messages_lisp"
+	@echo "... tf2_msgs_generate_messages_eus"
+	@echo "... tf2_msgs_generate_messages_cpp"
+	@echo "... actionlib_msgs_generate_messages_py"
 	@echo "... octomap_msgs_generate_messages_py"
-	@echo "... tf_generate_messages_nodejs"
+	@echo "... tf_generate_messages_eus"
+	@echo "... std_srvs_generate_messages_cpp"
+	@echo "... actionlib_msgs_generate_messages_cpp"
 	@echo "... pcl_msgs_generate_messages_py"
-	@echo "... actionlib_generate_messages_eus"
+	@echo "... install/local"
+	@echo "... std_srvs_generate_messages_eus"
+	@echo "... pcl_msgs_generate_messages_nodejs"
+	@echo "... tf_generate_messages_nodejs"
+	@echo "... octomap_tracking_server_node"
+	@echo "... tf_generate_messages_py"
+	@echo "... actionlib_msgs_generate_messages_nodejs"
+	@echo "... pcl_msgs_generate_messages_cpp"
+	@echo "... octomap_server_node"
+	@echo "... pcl_msgs_generate_messages_eus"
+	@echo "... visualization_msgs_generate_messages_eus"
+	@echo "... octomap_msgs_generate_messages_cpp"
+	@echo "... actionlib_msgs_generate_messages_eus"
+	@echo "... visualization_msgs_generate_messages_cpp"
+	@echo "... visualization_msgs_generate_messages_py"
+	@echo "... visualization_msgs_generate_messages_lisp"
+	@echo "... visualization_msgs_generate_messages_nodejs"
+	@echo "... std_srvs_generate_messages_py"
+	@echo "... topic_tools_generate_messages_cpp"
 	@echo "... pcl_msgs_generate_messages_lisp"
+	@echo "... topic_tools_generate_messages_eus"
+	@echo "... octomap_server_gencfg"
+	@echo "... std_srvs_generate_messages_lisp"
+	@echo "... nodelet_topic_tools_gencfg"
+	@echo "... topic_tools_generate_messages_lisp"
+	@echo "... std_srvs_generate_messages_nodejs"
+	@echo "... actionlib_generate_messages_lisp"
+	@echo "... octomap_server_nodelet"
+	@echo "... pcl_ros_gencfg"
+	@echo "... actionlib_generate_messages_py"
+	@echo "... topic_tools_generate_messages_nodejs"
+	@echo "... topic_tools_generate_messages_py"
 	@echo "... tf_generate_messages_cpp"
+	@echo "... tf_generate_messages_lisp"
+	@echo "... rebuild_cache"
+	@echo "... octomap_msgs_generate_messages_eus"
+	@echo "... actionlib_generate_messages_cpp"
+	@echo "... actionlib_generate_messages_eus"
+	@echo "... test"
 	@echo "... actionlib_generate_messages_nodejs"
 	@echo "... actionlib_msgs_generate_messages_lisp"
-	@echo "... topic_tools_generate_messages_py"
-	@echo "... nodelet_topic_tools_gencfg"
-	@echo "... actionlib_msgs_generate_messages_nodejs"
-	@echo "... actionlib_msgs_generate_messages_py"
 	@echo "... src/OctomapServer.o"
 	@echo "... src/OctomapServer.i"
 	@echo "... src/OctomapServer.s"

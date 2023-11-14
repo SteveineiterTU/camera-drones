@@ -1,24 +1,24 @@
 Determining if the pthread_create exist failed with the following output:
-Change Dir: /home/student/camera-drones/catkin_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/student/catkin_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_53b9e/fast"
-/usr/bin/make -f CMakeFiles/cmTC_53b9e.dir/build.make CMakeFiles/cmTC_53b9e.dir/build
-make[1]: Entering directory '/home/student/camera-drones/catkin_ws/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_53b9e.dir/CheckSymbolExists.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_53b9e.dir/CheckSymbolExists.c.o   -c /home/student/camera-drones/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_53b9e
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_53b9e.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_53b9e.dir/CheckSymbolExists.c.o  -o cmTC_53b9e 
-CMakeFiles/cmTC_53b9e.dir/CheckSymbolExists.c.o: In function `main':
+Run Build Command:"/usr/bin/make" "cmTC_ddd5c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ddd5c.dir/build.make CMakeFiles/cmTC_ddd5c.dir/build
+make[1]: Entering directory '/home/student/catkin_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ddd5c.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_ddd5c.dir/CheckSymbolExists.c.o   -c /home/student/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_ddd5c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ddd5c.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_ddd5c.dir/CheckSymbolExists.c.o  -o cmTC_ddd5c 
+CMakeFiles/cmTC_ddd5c.dir/CheckSymbolExists.c.o: In function `main':
 CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_53b9e.dir/build.make:97: recipe for target 'cmTC_53b9e' failed
-make[1]: *** [cmTC_53b9e] Error 1
-make[1]: Leaving directory '/home/student/camera-drones/catkin_ws/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_53b9e/fast' failed
-make: *** [cmTC_53b9e/fast] Error 2
+CMakeFiles/cmTC_ddd5c.dir/build.make:97: recipe for target 'cmTC_ddd5c' failed
+make[1]: *** [cmTC_ddd5c] Error 1
+make[1]: Leaving directory '/home/student/catkin_ws/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ddd5c/fast' failed
+make: *** [cmTC_ddd5c/fast] Error 2
 
-File /home/student/camera-drones/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /home/student/catkin_ws/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <pthread.h>
 
@@ -34,22 +34,22 @@ int main(int argc, char** argv)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /home/student/camera-drones/catkin_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/student/catkin_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_50004/fast"
-/usr/bin/make -f CMakeFiles/cmTC_50004.dir/build.make CMakeFiles/cmTC_50004.dir/build
-make[1]: Entering directory '/home/student/camera-drones/catkin_ws/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_50004.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_50004.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
-Linking C executable cmTC_50004
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_50004.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_50004.dir/CheckFunctionExists.c.o  -o cmTC_50004 -lpthreads 
+Run Build Command:"/usr/bin/make" "cmTC_b3ecc/fast"
+/usr/bin/make -f CMakeFiles/cmTC_b3ecc.dir/build.make CMakeFiles/cmTC_b3ecc.dir/build
+make[1]: Entering directory '/home/student/catkin_ws/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_b3ecc.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_b3ecc.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_b3ecc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b3ecc.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_b3ecc.dir/CheckFunctionExists.c.o  -o cmTC_b3ecc -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_50004.dir/build.make:97: recipe for target 'cmTC_50004' failed
-make[1]: *** [cmTC_50004] Error 1
-make[1]: Leaving directory '/home/student/camera-drones/catkin_ws/build/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_50004/fast' failed
-make: *** [cmTC_50004/fast] Error 2
+CMakeFiles/cmTC_b3ecc.dir/build.make:97: recipe for target 'cmTC_b3ecc' failed
+make[1]: *** [cmTC_b3ecc] Error 1
+make[1]: Leaving directory '/home/student/catkin_ws/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_b3ecc/fast' failed
+make: *** [cmTC_b3ecc/fast] Error 2
 
 

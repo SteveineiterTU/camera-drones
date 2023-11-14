@@ -1,0 +1,6 @@
+- git:
+    local-name: random_numbers
+    uri: https://github.com/ros-planning/random_numbers.git
+- git:
+    local-name: ros_tutorials
+    uri: https://github.com/ros/ros_tutorials.git
