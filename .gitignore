@@ -35,3 +35,7 @@ assignment_1/2019-11-18-19-37-10.bag
 #cache stuff
 CMakeCache.txt
 *.cache
+
+#catkin stuff
+catkin_ws/build
+catkin_ws/devel
