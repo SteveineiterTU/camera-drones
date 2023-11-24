@@ -63,6 +63,7 @@ private:
     optimalPlanner plannerType;
     planningObjective objectiveType;
     std::string outputFile;
+    bool use3D;
 
     void plan();
 

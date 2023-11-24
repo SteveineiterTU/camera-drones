@@ -22,13 +22,17 @@ DLA2PathPlanner::DLA2PathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, int ar
     goal_position.x = 1.; goal_position.y = 1.;
 
     // Parse the arguments, returns true if successful, false otherwise
-    if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile))
+    if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile, &use3D))
+    // if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile))
     {
         // Return with success
         ROS_INFO("DLA2PathPlanner::DLA2PathPlanner(...) argParse success!");
     } else {
         // Return with error - Modified argParse to make this equivalent to giving no arguments.
         ROS_INFO("DLA2PathPlanner::DLA2PathPlanner(...) argParse error!");
+    }
+    if (use3D) {
+        ROS_INFO("[DEBUG] Yes your majesty xD");  // TODO remove
     }
 }
 

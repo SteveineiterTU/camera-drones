@@ -330,7 +330,7 @@ ob::OptimizationObjectivePtr getPathLengthObjWithCostToGo(const ob::SpaceInforma
 }
 
 /** Parse the command line arguments into a string for an output file and the planner/optimization types */
-bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr)
+bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, bool *use3DPtr)
 {
     namespace bpo = boost::program_options;
 
@@ -342,7 +342,8 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
         ("planner,p", bpo::value<std::string>()->default_value("RRTstar"), "(Optional) Specify the optimal planner to use, defaults to RRTstar if not given. Valid options are BFMTstar, BITstar, CForest, FMTstar, InformedRRTstar, PRMstar, RRTstar, and SORRTstar.") //Alphabetical order
         ("objective,o", bpo::value<std::string>()->default_value("PathLength"), "(Optional) Specify the optimization objective, defaults to PathLength if not given. Valid options are PathClearance, PathLength, ThresholdPathLength, and WeightedLengthAndClearanceCombo.") //Alphabetical order
         ("file,f", bpo::value<std::string>()->default_value(""), "(Optional) Specify an output path for the found solution path.")
-        ("info,i", bpo::value<unsigned int>()->default_value(0u), "(Optional) Set the OMPL log level. 0 for WARN, 1 for INFO, 2 for DEBUG. Defaults to WARN.");
+        ("info,i", bpo::value<unsigned int>()->default_value(0u), "(Optional) Set the OMPL log level. 0 for WARN, 1 for INFO, 2 for DEBUG. Defaults to WARN.")
+        ("use_3d,u", bpo::value<bool>()->default_value(false), "(Optional) Specify if the toy example is 3d.");
     bpo::variables_map vm;
     bpo::store(bpo::parse_command_line(argc, argv, desc), vm);
     bpo::notify(vm);
@@ -456,6 +457,9 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
 
     // Get the output file string and store it in the return pointer
     *outputFilePtr = vm["file"].as<std::string>();
+
+    // Get the boolean if we have a 3d or 2d calculation and store it in the return pointer.
+    *use3DPtr = vm["use_3d"].as<bool>();
 
     // Looks like we parsed the arguments successfully
     return true;
