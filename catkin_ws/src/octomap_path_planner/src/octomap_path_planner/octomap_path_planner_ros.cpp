@@ -1,49 +1,55 @@
 /*
- * DLA2 Path Planner ROS - dla2_path_planner_ros.cpp
+ * Octomap Path Planner ROS - octomap_path_planner_ros.cpp
  *
- *  Author: Jesus Pestana <pestana@icg.tugraz.at>
- *  Created on: Dec 19, 2019
+ *  Author: Stefan Schorkmeier <s.schoerkmeier@student.tugraz.at>
+ *  Created on: November 25, 2023
  *
  */
 
-#include <dla2_path_planner/dla2_path_planner_ros.h>
+#include <octomap_path_planner/octomap_path_planner_ros.h>
+#include <dynamicEDT3D/dynamicEDTOctomap.h>
+#include <octomap/octomap.h>
+#include <octomap/OcTree.h>
 
-
-DLA2PathPlanner::DLA2PathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, int argc, char** argv) :
+OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, int argc, char** argv) :
     pnode_(pn),
     node_(n),
     traj_planning_successful(false)
 {   
     // ROS topics
-    current_position_sub = pnode_.subscribe("current_position", 10, &DLA2PathPlanner::currentPositionCallback, this);
-    goal_position_sub = pnode_.subscribe("goal_position", 10, &DLA2PathPlanner::goalPositionCallback, this);
+    current_position_sub = pnode_.subscribe("current_position", 10, &OctomapPathPlanner::currentPositionCallback, this);
+    goal_position_sub = pnode_.subscribe("goal_position", 10, &OctomapPathPlanner::goalPositionCallback, this);
     trajectory_pub = pnode_.advertise<mav_planning_msgs::PolynomialTrajectory4D>("planned_trajectory", 1);
 
     current_position.x = 0.; current_position.y = 0.; current_position.z = 0.;
     goal_position.x = 1.; goal_position.y = 1.; goal_position.z = 1.;
 
     // Parse the arguments, returns true if successful, false otherwise
-    if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile, &use3D))
+    if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile, &octomapFile))
     // if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile))
     {
         // Return with success
-        ROS_INFO("DLA2PathPlanner::DLA2PathPlanner(...) argParse success!");
+        ROS_INFO("OctomapPathPlanner::OctomapPathPlanner(...) argParse success!");
     } else {
         // Return with error - Modified argParse to make this equivalent to giving no arguments.
-        ROS_INFO("DLA2PathPlanner::DLA2PathPlanner(...) argParse error!");
+        ROS_INFO("OctomapPathPlanner::OctomapPathPlanner(...) argParse error!");
     }
+    
+    tree = new octomap::OcTree(0.05);
+    tree->readBinary(octomapFile);
+    ROS_INFO_STREAM("read in tree, " << tree->getNumLeafNodes() << " leaves ");
 }
 
-DLA2PathPlanner::~DLA2PathPlanner() {
+OctomapPathPlanner::~OctomapPathPlanner() {
 
 }
 
-void DLA2PathPlanner::currentPositionCallback(const geometry_msgs::Point::ConstPtr& p_msg) {
+void OctomapPathPlanner::currentPositionCallback(const geometry_msgs::Point::ConstPtr& p_msg) {
     current_position = *p_msg;
     ROS_INFO_STREAM("New current position, x: " << current_position.x << "; y: " << current_position.y << "; z: " << current_position.z);
 }
 
-void DLA2PathPlanner::goalPositionCallback(const geometry_msgs::Point::ConstPtr& p_msg) {
+void OctomapPathPlanner::goalPositionCallback(const geometry_msgs::Point::ConstPtr& p_msg) {
     goal_position = *p_msg;
     ROS_INFO_STREAM("New goal position, x: " << goal_position.x << "; y: " << goal_position.y << "; z: " << goal_position.z);
 
@@ -58,7 +64,7 @@ void DLA2PathPlanner::goalPositionCallback(const geometry_msgs::Point::ConstPtr&
     printRelevantInformation();
 }
 
-void DLA2PathPlanner::convertOMPLPathToMsg() {
+void OctomapPathPlanner::convertOMPLPathToMsg() {
     mav_planning_msgs::PolynomialTrajectory4D &msg = last_traj_msg;
     msg.segments.clear();
 
@@ -92,7 +98,7 @@ void DLA2PathPlanner::convertOMPLPathToMsg() {
 
 }
 
-void DLA2PathPlanner::printRelevantInformation() {
+void OctomapPathPlanner::printRelevantInformation() {
     if (!traj_planning_successful) {
         ROS_INFO_STREAM("Path planning was NOT successful. \n  path_calculation_time: " << path_calculation_time.count());
         return;
@@ -112,7 +118,7 @@ void DLA2PathPlanner::printRelevantInformation() {
         );
 }
 
-double DLA2PathPlanner::calculateAverageClearance() {
+double OctomapPathPlanner::calculateAverageClearance() {
     double sum = 0.0;
     for (const auto& value : clearence_list) {
         sum += value;
@@ -126,7 +132,7 @@ double DLA2PathPlanner::calculateAverageClearance() {
 }
 
 
-void DLA2PathPlanner::plan()
+void OctomapPathPlanner::plan()
 {
     // Used to determine planing duration
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -142,7 +148,7 @@ void DLA2PathPlanner::plan()
     auto si(std::make_shared<ob::SpaceInformation>(space));
 
     // Set the object used to check which states in the space are valid
-    si->setStateValidityChecker(std::make_shared<ValidityChecker>(si));
+    si->setStateValidityChecker(std::make_shared<ValidityChecker>(si, tree));
 
     si->setup();
 

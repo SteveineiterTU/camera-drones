@@ -1,8 +1,8 @@
 /*
- * DLA2 Path Planner ROS - dla2_path_planner_ros.h
+ * Octomap Path Planner ROS - octomap_path_planner_ros.h
  *
- *  Author: Jesus Pestana <pestana@icg.tugraz.at>
- *  Created on: Dec 19, 2019
+ *  Author: Stefan Schorkmeier <s.schoerkmeier@student.tugraz.at>
+ *  Created on: November 25, 2023
  *
  */
 
@@ -10,7 +10,7 @@
 #define DLA2_PATH_PLANNER_H_
 
 #include "ros/ros.h"
-#include <dla2_path_planner/helper_functions.h>
+#include <octomap_path_planner/octomap_helper_functions.h>
 // #include <geometry_msgs/Point.h>
 #include <mav_planning_msgs/Point2D.h>
 #include <mav_planning_msgs/PolynomialTrajectory4D.h>
@@ -50,12 +50,13 @@
 // #include <any> // NOT working becuase we don't have C++17 and higher -.- man i wanted to use a map so badly for the informaion
 #include <chrono>
 #include <list>
+#include <dynamicEDT3D/dynamicEDTOctomap.h>
 
-class DLA2PathPlanner
+class OctomapPathPlanner
 {
 public:
-    DLA2PathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, int argc, char** argv);
-    ~DLA2PathPlanner();
+    OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, int argc, char** argv);
+    ~OctomapPathPlanner();
 
 private:
     ros::NodeHandle &pnode_;
@@ -66,7 +67,7 @@ private:
     optimalPlanner plannerType;
     planningObjective objectiveType;
     std::string outputFile;
-    bool use3D;
+    std::string octomapFile;
 
     void plan();
 
@@ -90,6 +91,8 @@ private:
      double path_cost;
      std::chrono::seconds path_calculation_time;
      std::list<double> clearence_list; 
+
+     octomap::OcTree *tree;
 };
 
 #endif // DLA2_PATH_PLANNER_H_

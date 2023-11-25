@@ -1,8 +1,8 @@
 /*
- * DLA2 Path Planner ROS - helper_functions.h
+ * Octomap Path Planner ROS - octomap_helper_functions.h
  *
- *  Author: Jesus Pestana <pestana@icg.tugraz.at>
- *  Created on: Dec 19, 2019
+ *  Author: Stefan Schorkmeier <s.schoerkmeier@student.tugraz.at>
+ *  Created on: November 25, 2023
  *
  */
 
@@ -39,6 +39,9 @@
 #include <memory>
 
 #include <fstream>
+#include <dynamicEDT3D/dynamicEDTOctomap.h>
+
+
 
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
@@ -66,7 +69,7 @@ enum planningObjective
 };
 
 // Parse the command-line arguments
-bool argParse(int argc, char** argv, double *runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, bool *use3DPtr);
+bool argParse(int argc, char** argv, double *runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, std::string *octomap);
 
 // Our "collision checker". For this demo, our robot's state space
 // lies in [0,1]x[0,1], with a circular obstacle of radius 0.25
@@ -75,8 +78,11 @@ bool argParse(int argc, char** argv, double *runTimePtr, optimalPlanner *planner
 class ValidityChecker : public ob::StateValidityChecker
 {
 public:
-    ValidityChecker(const ob::SpaceInformationPtr& si) :
-        ob::StateValidityChecker(si) {}
+    octomap::OcTree *_tree;
+
+    ValidityChecker(const ob::SpaceInformationPtr& si, octomap::OcTree* tree) :
+        ob::StateValidityChecker(si),  
+        _tree(tree) {}
 
     // Returns whether the given state's position overlaps the
     // circular obstacle
@@ -98,10 +104,41 @@ public:
         double x = states->values[0];
         double y = states->values[1];
         double z = states->values[2];
+        
+        double a,b,c;
+        _tree->getMetricMin(a,b,c);
+        octomap::point3d min(a,b,c);
+        //std::cout<<"Metric min: "<<x<<","<<y<<","<<z<<std::endl;
+        _tree->getMetricMax(a,b,c);
+        octomap::point3d max(a,b,c);
+        //std::cout<<"Metric max: "<<x<<","<<y<<","<<z<<std::endl;
 
-        // Distance formula between three points, offset by the sphere's
-        // radius
-        return sqrt((x-0.5)*(x-0.5) + (y-0.5)*(y-0.5) + (z-0.5)*(z-0.5)) - 0.25; 
+        bool unknownAsOccupied = true;
+        unknownAsOccupied = false;
+        float maxDist = 1.0;
+        //- the first argument ist the max distance at which distance computations are clamped
+        //- the second argument is the octomap
+        //- arguments 3 and 4 can be used to restrict the distance map to a subarea
+        //- argument 5 defines whether unknown space is treated as occupied or free
+        //The constructor copies data but does not yet compute the distance map
+        DynamicEDTOctomap distmap(maxDist, _tree, min, max, unknownAsOccupied);
+
+        //This computes the distance map
+        distmap.update(); 
+
+        //This is how you can query the map
+        octomap::point3d p(x, y, z);
+        //As we don't know what the dimension of the loaded map are, we modify this point
+        p.x() = x - min.x() * (max.x() - min.x());
+        p.y() = y - min.y() * (max.y() - min.y());
+        p.z() = z - min.z() * (max.z() - min.z());
+
+        octomap::point3d closestObst;
+        float distance;
+
+        distmap.getDistanceAndClosestObstacle(p, distance, closestObst);
+
+        return distance; 
      
     }
 };
@@ -341,7 +378,7 @@ ob::OptimizationObjectivePtr getPathLengthObjWithCostToGo(const ob::SpaceInforma
 }
 
 /** Parse the command line arguments into a string for an output file and the planner/optimization types */
-bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, bool *use3DPtr)
+bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, std::string *octomapFile)
 {
     namespace bpo = boost::program_options;
 
@@ -349,12 +386,12 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
     bpo::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "produce help message")
+        ("octomap", bpo::value<std::string>()->required(), "Specify the path/filename of the octomap to use.")
         ("runtime,t", bpo::value<double>()->default_value(1.0), "(Optional) Specify the runtime in seconds. Defaults to 1 and must be greater than 0.")
         ("planner,p", bpo::value<std::string>()->default_value("RRTstar"), "(Optional) Specify the optimal planner to use, defaults to RRTstar if not given. Valid options are BFMTstar, BITstar, CForest, FMTstar, InformedRRTstar, PRMstar, RRTstar, and SORRTstar.") //Alphabetical order
         ("objective,o", bpo::value<std::string>()->default_value("PathLength"), "(Optional) Specify the optimization objective, defaults to PathLength if not given. Valid options are PathClearance, PathLength, ThresholdPathLength, and WeightedLengthAndClearanceCombo.") //Alphabetical order
         ("file,f", bpo::value<std::string>()->default_value(""), "(Optional) Specify an output path for the found solution path.")
-        ("info,i", bpo::value<unsigned int>()->default_value(0u), "(Optional) Set the OMPL log level. 0 for WARN, 1 for INFO, 2 for DEBUG. Defaults to WARN.")
-        ("use_3d,u", bpo::value<bool>()->default_value(false), "(Optional) Specify if the toy example is 3d.");
+        ("info,i", bpo::value<unsigned int>()->default_value(0u), "(Optional) Set the OMPL log level. 0 for WARN, 1 for INFO, 2 for DEBUG. Defaults to WARN.");
     bpo::variables_map vm;
     bpo::store(bpo::parse_command_line(argc, argv, desc), vm);
     bpo::notify(vm);
@@ -470,8 +507,7 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
     *outputFilePtr = vm["file"].as<std::string>();
 
     // Get the boolean if we have a 3d or 2d calculation and store it in the return pointer.
-    *use3DPtr = vm["use_3d"].as<bool>();
-
+    *octomapFile = vm["octomap"].as<std::string>();
     // Looks like we parsed the arguments successfully
     return true;
 }

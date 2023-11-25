@@ -1,0 +1,23 @@
+Need to run:
+  https://ompl.kavrakilab.org/core/installation.html for ompl (i think by going to the ROS tab has worked the best)
+  sudo apt-get install ros-melodic-dynamic-edt-3d for dynamicedt3d
+  sudo apt-get install ros-melodic-octomap and add 
+    find_package(octomap REQUIRED)
+    include_directories(${OCTOMAP_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME}_ros 
+      ${OCTOMAP_LIBRARIES}
+    )
+  to the makefile of the project. Also we need dependencies in the package.xml.
+  Same for dynamicEDT3D: 
+    find_package(dynamicEDT3D)
+    include_directories(${DYNAMICEDT3D_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME}_ros 
+      ${DYNAMICEDT3D_LIBRARIES}
+    )
+
+  
+
+To run the examples of edt3d:
+  - make
+  - go to devel/bin and enter the file to run (eg  ./exampleEDTOctomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt)
+
