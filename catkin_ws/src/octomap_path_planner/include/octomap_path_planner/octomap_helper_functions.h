@@ -7,8 +7,8 @@
  */
 
 
-#ifndef DLA2_PATH_PLANNER_HELPER_FUNCTIONS_H_
-#define DLA2_PATH_PLANNER_HELPER_FUNCTIONS_H_
+#ifndef OCTOMAP_PATH_PLANNER_HELPER_FUNCTIONS_H_
+#define OCTOMAP_PATH_PLANNER_HELPER_FUNCTIONS_H_
 
 
 #include <ompl/base/SpaceInformation.h>
@@ -72,6 +72,8 @@ enum planningObjective
 bool argParse(int argc, char** argv, double *runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, std::string *octomap);
 
 
+// TODO: passt the tree again, with that we can call tree.computeRayKeys(origin, end, keys) where origin is our current state and end is
+// the closest object i guess? After that we can call tree.search(keys) to check if something exists on this ray i guess.
 class ValidityChecker : public ob::StateValidityChecker
 {
 public:
@@ -480,4 +482,4 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
     return true;
 }
 
-#endif // DLA2_PATH_PLANNER_HELPER_FUNCTIONS_H_
+#endif // OCTOMAP_PATH_PLANNER_HELPER_FUNCTIONS_H_

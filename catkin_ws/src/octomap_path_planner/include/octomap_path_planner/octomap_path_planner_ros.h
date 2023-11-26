@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef DLA2_PATH_PLANNER_H_
-#define DLA2_PATH_PLANNER_H_
+#ifndef OCTOMAP_PATH_PLANNER_H_
+#define OCTOMAP_PATH_PLANNER_H_
 
 #include "ros/ros.h"
 #include <octomap_path_planner/octomap_helper_functions.h>
@@ -98,4 +98,4 @@ private:
  
 };
 
-#endif // DLA2_PATH_PLANNER_H_
+#endif // OCTOMAP_PATH_PLANNER_H_
