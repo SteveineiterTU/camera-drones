@@ -3,7 +3,7 @@
 TrajectoryVisualization::TrajectoryVisualization(ros::NodeHandle &n, ros::NodeHandle &pn) {
     // ROS subscribers
     trajectory_sub = n.subscribe<mav_planning_msgs::PolynomialTrajectory4D>(
-                "/path_planner/planned_trajectory", 10,
+                "/octomap_path_planner/planned_trajectory", 10,
                 &TrajectoryVisualization::trajectoryCallback, this);
 
     // ROS publishers

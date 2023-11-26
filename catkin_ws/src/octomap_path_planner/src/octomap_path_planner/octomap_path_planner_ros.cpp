@@ -11,11 +11,23 @@
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>
 
+#include <cmath>
+
 OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, int argc, char** argv) :
     pnode_(pn),
     node_(n),
     traj_planning_successful(false)
 {   
+    // Parse the arguments, returns true if successful, false otherwise
+    if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile, &octomapFile))
+    {
+        // Return with success
+        ROS_INFO("OctomapPathPlanner::OctomapPathPlanner(...) argParse success!");
+    } else {
+        // Return with error - Modified argParse to make this equivalent to giving no arguments.
+        ROS_INFO("OctomapPathPlanner::OctomapPathPlanner(...) argParse error!");
+    }
+
     // ROS topics
     current_position_sub = pnode_.subscribe("current_position", 10, &OctomapPathPlanner::currentPositionCallback, this);
     goal_position_sub = pnode_.subscribe("goal_position", 10, &OctomapPathPlanner::goalPositionCallback, this);
@@ -24,20 +36,30 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     current_position.x = 0.; current_position.y = 0.; current_position.z = 0.;
     goal_position.x = 1.; goal_position.y = 1.; goal_position.z = 1.;
 
-    // Parse the arguments, returns true if successful, false otherwise
-    if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile, &octomapFile))
-    // if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile))
-    {
-        // Return with success
-        ROS_INFO("OctomapPathPlanner::OctomapPathPlanner(...) argParse success!");
-    } else {
-        // Return with error - Modified argParse to make this equivalent to giving no arguments.
-        ROS_INFO("OctomapPathPlanner::OctomapPathPlanner(...) argParse error!");
-    }
-    
-    tree = new octomap::OcTree(0.05);
+    auto tree = new octomap::OcTree(0.05);
     tree->readBinary(octomapFile);
     ROS_INFO_STREAM("read in tree, " << tree->getNumLeafNodes() << " leaves ");
+
+    // Setting up the dist map. I assume we have a static octomap aka do not have to change this map. 
+    // Also by having this in the clearance function for example it resulted in weird errors aka i could
+    // not calculate any path (eg from 0 0 0 to 1 0 0)
+    double a,b,c;
+    tree->getMetricMin(a,b,c);
+    octomap::point3d min(a,b,c);
+    tree->getMetricMax(a,b,c);
+    octomap::point3d max(a,b,c);
+
+    bool unknownAsOccupied = false;
+    float maxDist = 50.0;
+    //- the first argument ist the max distance at which distance computations are clamped
+    //- the second argument is the octomap
+    //- arguments 3 and 4 can be used to restrict the distance map to a subarea
+    //- argument 5 defines whether unknown space is treated as occupied or free
+    //The constructor copies data but does not yet compute the distance map
+    distmap = new DynamicEDTOctomap(maxDist, tree, min, max, unknownAsOccupied);
+
+    //This computes the distance map
+    distmap->update(); 
 }
 
 OctomapPathPlanner::~OctomapPathPlanner() {
@@ -100,16 +122,28 @@ void OctomapPathPlanner::convertOMPLPathToMsg() {
 
 void OctomapPathPlanner::printRelevantInformation() {
     if (!traj_planning_successful) {
-        ROS_INFO_STREAM("Path planning was NOT successful. \n  path_calculation_time: " << path_calculation_time.count());
+        ROS_INFO_STREAM(
+        "Path planning was NOT successful."
+        << "\n  path_calculation_time: " << path_calculation_time.count() << "ms"
+        ); 
         return;
     }
     auto minimum_clearance = std::min_element(clearence_list.begin(), clearence_list.end());
     auto maximum_clearance = std::max_element(clearence_list.begin(), clearence_list.end());
     double average_clearance = calculateAverageClearance();
+    
+    const ompl::base::State* last_state = p_last_traj_ompl->getState(p_last_traj_ompl->getStateCount() - 1);
+    double* my_values = last_state->as<ompl::base::RealVectorStateSpace::StateType>()->values;
+    bool point_reached = (
+        my_values[0] == goal_position.x
+        && my_values[1] == goal_position.y
+        && my_values[2] == goal_position.z
+    );
+    
     ROS_INFO_STREAM(
         "Path planning was successful." 
-        << "\n  path_calculation_time: " << path_calculation_time.count()
-        << "\n  point_reached: " << (current_position == goal_position)
+        << "\n  path_calculation_time: " << path_calculation_time.count() << "ms"
+        << "\n  point_reached: " << point_reached
         << "\n  length: " << path_length
         << "\n  cost: " << path_cost 
         << "\n  minimum_clearance: " << *minimum_clearance
@@ -117,6 +151,7 @@ void OctomapPathPlanner::printRelevantInformation() {
         << "\n  average_clearance: " << average_clearance
         );
 }
+
 
 double OctomapPathPlanner::calculateAverageClearance() {
     double sum = 0.0;
@@ -138,29 +173,36 @@ void OctomapPathPlanner::plan()
     auto start_time = std::chrono::high_resolution_clock::now();
 
     // Construct the robot state space in which we're planning. We're
-    // planning in [0,1]x[0,1]x[0,1], a subset of R^3.
+    // planning in [min, max]x[min, max]x[min, max], a subset of R^3.
     auto space(std::make_shared<ob::RealVectorStateSpace>(3));
-   
-    // Set the bounds of space to be in [0,1].
-    space->setBounds(0.0, 1.0);
+
+    // Set the bounds of space to be in [min, max].
+    // double a, b, c;
+    // tree->getMetricMin(a,b,c);
+    // double minimum_value = std::min({a, b, c});
+    // std::cout<<"Metric min: "<<a<<","<<b<<","<<c<<std::endl;
+    // tree->getMetricMax(a,b,c);
+    // double maximum_value = std::max({a, b, c});
+    // std::cout<<"Metric max: "<<a<<","<<b<<","<<c<<std::endl;
+    // std::cout << minimum_value << " and max: " << maximum_value;
+
+    space->setBounds(-100, 100); // TODO i guess we have to change those values?
 
     // Construct a space information instance for this state space
     auto si(std::make_shared<ob::SpaceInformation>(space));
 
     // Set the object used to check which states in the space are valid
-    si->setStateValidityChecker(std::make_shared<ValidityChecker>(si, tree));
-
+    si->setStateValidityChecker(std::make_shared<ValidityChecker>(si, distmap));
     si->setup();
 
     // Set our robot's starting state to be the bottom-left corner of
-    // the environment, or (0,0).
+    // the environment, or [0, 0, 0], if not specified by the user.
     ob::ScopedState<> start(space);
     start->as<ob::RealVectorStateSpace::StateType>()->values[0] = current_position.x;
     start->as<ob::RealVectorStateSpace::StateType>()->values[1] = current_position.y;
     start->as<ob::RealVectorStateSpace::StateType>()->values[2] = current_position.z;
 
-    // Set our robot's goal state to be the top-right corner of the
-    // environment, or (1,1).
+    // Set our robot's goal state to be the one entered by the user.
     ob::ScopedState<> goal(space);
     goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal_position.x;
     goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal_position.y;
@@ -184,8 +226,13 @@ void OctomapPathPlanner::plan()
     optimizingPlanner->setProblemDefinition(pdef);
     optimizingPlanner->setup();
 
-    // attempt to solve the planning problem in the given runtime
-    ob::PlannerStatus solved = optimizingPlanner->solve(runTime);
+    ob::PlannerStatus solved = ob::PlannerStatus::UNKNOWN;
+    if (runTime > 0) {
+        solved = optimizingPlanner->solve(runTime);
+    } else {
+        solved = optimizingPlanner->solve(ompl::base::IterationTerminationCondition(1000));
+    }
+    
     // Used to determine planing duration
     auto end_time = std::chrono::high_resolution_clock::now(); 
 
@@ -217,5 +264,5 @@ void OctomapPathPlanner::plan()
         std::cout << "No solution found." << std::endl;
         traj_planning_successful = false;
     }
-    path_calculation_time = std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time);
+    path_calculation_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 }

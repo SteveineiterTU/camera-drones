@@ -71,75 +71,42 @@ enum planningObjective
 // Parse the command-line arguments
 bool argParse(int argc, char** argv, double *runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, std::string *octomap);
 
-// Our "collision checker". For this demo, our robot's state space
-// lies in [0,1]x[0,1], with a circular obstacle of radius 0.25
-// centered at (0.5,0.5). Any states lying in this circular region are
-// considered "in collision".
+
 class ValidityChecker : public ob::StateValidityChecker
 {
 public:
-    octomap::OcTree *_tree;
+    DynamicEDTOctomap *_distmap;
 
-    ValidityChecker(const ob::SpaceInformationPtr& si, octomap::OcTree* tree) :
+    ValidityChecker(const ob::SpaceInformationPtr& si, DynamicEDTOctomap* distmap) :
         ob::StateValidityChecker(si),  
-        _tree(tree) {}
+        _distmap(distmap) {}
 
-    // Returns whether the given state's position overlaps the
-    // circular obstacle
+
     bool isValid(const ob::State* state) const override
     {
-        return this->clearance(state) > 0.0;
+        return this->clearance(state) > 2.0;
     }
 
-    // Returns the distance from the given state's position to the
-    // boundary of the circular obstacle.
+    // Returns the distance from the given state's position to octomap things.
     double clearance(const ob::State* state) const override
     {
-        // We know we're working with a RealVectorStateSpace in this
-        // example, so we downcast state into the specific type.
         const auto* states =
             state->as<ob::RealVectorStateSpace::StateType>();
 
-        // Extract the robot's (x,y) position from its state
         double x = states->values[0];
         double y = states->values[1];
         double z = states->values[2];
-        
-        double a,b,c;
-        _tree->getMetricMin(a,b,c);
-        octomap::point3d min(a,b,c);
-        //std::cout<<"Metric min: "<<x<<","<<y<<","<<z<<std::endl;
-        _tree->getMetricMax(a,b,c);
-        octomap::point3d max(a,b,c);
-        //std::cout<<"Metric max: "<<x<<","<<y<<","<<z<<std::endl;
 
-        bool unknownAsOccupied = true;
-        unknownAsOccupied = false;
-        float maxDist = 1.0;
-        //- the first argument ist the max distance at which distance computations are clamped
-        //- the second argument is the octomap
-        //- arguments 3 and 4 can be used to restrict the distance map to a subarea
-        //- argument 5 defines whether unknown space is treated as occupied or free
-        //The constructor copies data but does not yet compute the distance map
-        DynamicEDTOctomap distmap(maxDist, _tree, min, max, unknownAsOccupied);
-
-        //This computes the distance map
-        distmap.update(); 
-
-        //This is how you can query the map
         octomap::point3d p(x, y, z);
-        //As we don't know what the dimension of the loaded map are, we modify this point
-        p.x() = x - min.x() * (max.x() - min.x());
-        p.y() = y - min.y() * (max.y() - min.y());
-        p.z() = z - min.z() * (max.z() - min.z());
-
         octomap::point3d closestObst;
         float distance;
 
-        distmap.getDistanceAndClosestObstacle(p, distance, closestObst);
-
-        return distance; 
-     
+        _distmap->getDistanceAndClosestObstacle(p, distance, closestObst);
+        std::cout << "[DEBUG STUDENT] distance: " << distance << "\n";
+        //std::cout << "[DEBUG STUDENT] x: " << x << " y: " << y << " z: " << z << "\n";
+        // Assumption: z cannot be less then 0 aka the floor is at z = 0.
+        distance = z < 0 ? -10 : distance;
+        return distance != -1 ? distance : 100; 
     }
 };
 
@@ -387,7 +354,7 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
     desc.add_options()
         ("help,h", "produce help message")
         ("octomap", bpo::value<std::string>()->required(), "Specify the path/filename of the octomap to use.")
-        ("runtime,t", bpo::value<double>()->default_value(1.0), "(Optional) Specify the runtime in seconds. Defaults to 1 and must be greater than 0.")
+        ("runtime,t", bpo::value<double>()->default_value(0), "(Optional) Specify the runtime in seconds. Defaults to 0, which means iteration number is used as stopping creteria. Else it must be greater than 0.")
         ("planner,p", bpo::value<std::string>()->default_value("RRTstar"), "(Optional) Specify the optimal planner to use, defaults to RRTstar if not given. Valid options are BFMTstar, BITstar, CForest, FMTstar, InformedRRTstar, PRMstar, RRTstar, and SORRTstar.") //Alphabetical order
         ("objective,o", bpo::value<std::string>()->default_value("PathLength"), "(Optional) Specify the optimization objective, defaults to PathLength if not given. Valid options are PathClearance, PathLength, ThresholdPathLength, and WeightedLengthAndClearanceCombo.") //Alphabetical order
         ("file,f", bpo::value<std::string>()->default_value(""), "(Optional) Specify an output path for the found solution path.")
@@ -431,8 +398,9 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
     // Sanity check
     if (*runTimePtr <= 0.0)
     {
-        std::cout << "Invalid runtime." << std::endl << std::endl << desc << std::endl;
-        return false;
+        // Currently we say if runtime is 0 then we use another early stopping procedure. TODO Change in future. 
+        // std::cout << "Invalid runtime." << std::endl << std::endl << desc << std::endl;
+        // return false;
     }
 
     // Get the specified planner as a string

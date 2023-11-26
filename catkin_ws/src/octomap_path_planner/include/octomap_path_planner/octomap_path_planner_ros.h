@@ -87,12 +87,15 @@ private:
 
     // Our Variables
     // std::map<std::string, std::variant<int, double>> relevant_path_information;
-     double path_length;
-     double path_cost;
-     std::chrono::seconds path_calculation_time;
-     std::list<double> clearence_list; 
+    double path_length;
+    double path_cost;
+    std::chrono::milliseconds path_calculation_time;
+    std::list<double> clearence_list; 
 
-     octomap::OcTree *tree;
+    DynamicEDTOctomap *distmap;
+
+    // Our functions
+ 
 };
 
 #endif // DLA2_PATH_PLANNER_H_

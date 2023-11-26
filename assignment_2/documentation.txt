@@ -21,3 +21,6 @@ To run the examples of edt3d:
   - make
   - go to devel/bin and enter the file to run (eg  ./exampleEDTOctomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt)
 
+Advantage of iteratrions over time:
+  - We can quiete exactly say how much processpower we want to use, time could be worse in that regard. There a many other cooler metrics but its too hard for me atm to impelment xD
+

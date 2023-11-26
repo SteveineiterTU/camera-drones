@@ -100,10 +100,19 @@ void DLA2PathPlanner::printRelevantInformation() {
     auto minimum_clearance = std::min_element(clearence_list.begin(), clearence_list.end());
     auto maximum_clearance = std::max_element(clearence_list.begin(), clearence_list.end());
     double average_clearance = calculateAverageClearance();
+
+    const ompl::base::State* last_state = p_last_traj_ompl->getState(p_last_traj_ompl->getStateCount() - 1);
+    double* my_values = last_state->as<ompl::base::RealVectorStateSpace::StateType>()->values;
+    bool point_reached = (
+        my_values[0] == goal_position.x
+        && my_values[1] == goal_position.y
+        && my_values[2] == goal_position.z
+    );
+
     ROS_INFO_STREAM(
         "Path planning was successful." 
         << "\n  path_calculation_time: " << path_calculation_time.count()
-        << "\n  point_reached: " << (current_position == goal_position)
+        << "\n  point_reached: " << point_reached
         << "\n  length: " << path_length
         << "\n  cost: " << path_cost 
         << "\n  minimum_clearance: " << *minimum_clearance
