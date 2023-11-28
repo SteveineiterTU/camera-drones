@@ -86,18 +86,19 @@ public:
 
     bool isValid(const ob::State* state) const override
     {
-        return this->clearance(state) > 2.0;
+        // return this->clearance(state) > 2.0;
+        return this->clearance(state) > 0;
     }
 
     // Returns the distance from the given state's position to octomap things.
     double clearance(const ob::State* state) const override
     {
-        const auto* states =
+        const auto* _state =
             state->as<ob::RealVectorStateSpace::StateType>();
 
-        double x = states->values[0];
-        double y = states->values[1];
-        double z = states->values[2];
+        double x = _state->values[0];
+        double y = _state->values[1];
+        double z = _state->values[2];
 
         octomap::point3d p(x, y, z);
         octomap::point3d closestObst;
@@ -107,8 +108,45 @@ public:
         std::cout << "[DEBUG STUDENT] distance: " << distance << "\n";
         //std::cout << "[DEBUG STUDENT] x: " << x << " y: " << y << " z: " << z << "\n";
         // Assumption: z cannot be less then 0 aka the floor is at z = 0.
-        distance = z < 0 ? -10 : distance;
+        // distance = z < 0 ? -10 : distance;
         return distance != -1 ? distance : 100; 
+    }
+};
+
+class LocalMotionValidator : public ob::MotionValidator
+{
+public:
+    octomap::OcTree *_tree;
+
+    LocalMotionValidator(const ob::SpaceInformationPtr& si, octomap::OcTree* tree) : 
+        ob::MotionValidator(si),
+        _tree(tree) {}
+
+
+    bool checkMotion(const ob::State *s1, const ob::State *s2) const override {
+        return motionClearance(s1, s2);            
+    }
+
+     bool checkMotion(const ob::State *s1, const ob::State *s2, std::pair<ob::State *, double> &lastValid) const override {
+        return motionClearance(s1, s2);
+    }
+
+    bool motionClearance(const ob::State *s1, const ob::State *s2) const {
+            const auto* state_1 = s1->as<ob::RealVectorStateSpace::StateType>();
+            const auto* state_2 = s2->as<ob::RealVectorStateSpace::StateType>();
+
+            octomap::point3d start(state_1->values[0], state_1->values[1], state_1->values[2]);
+            octomap::point3d end(state_2->values[0], state_2->values[1], state_2->values[2]);
+            octomap::point3d direction(
+                state_2->values[0] - state_1->values[0], 
+                state_2->values[1] - state_1->values[1], 
+                state_2->values[2] - state_1->values[2]
+            );
+            std::cout << "[DEBUG STUDENT] start: " << start << " end: " << end << " direction: " << direction << "\n";
+            octomap::point3d last_cell;
+            bool foo = _tree->castRay(start, direction, last_cell, false, -1); // TODO ponder if maxRange should be changed tho
+            std::cout << "[DEBUG STUDENT] Ray return value: " << foo << "\n";
+            return !foo; // True if somehting has been hit.
     }
 };
 

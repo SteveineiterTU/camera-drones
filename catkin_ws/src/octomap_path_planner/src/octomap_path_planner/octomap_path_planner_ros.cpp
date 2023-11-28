@@ -36,7 +36,7 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     current_position.x = 0.; current_position.y = 0.; current_position.z = 0.;
     goal_position.x = 1.; goal_position.y = 1.; goal_position.z = 1.;
 
-    auto tree = new octomap::OcTree(0.05);
+    tree = new octomap::OcTree(0.05);
     tree->readBinary(octomapFile);
     ROS_INFO_STREAM("read in tree, " << tree->getNumLeafNodes() << " leaves ");
 
@@ -193,6 +193,7 @@ void OctomapPathPlanner::plan()
 
     // Set the object used to check which states in the space are valid
     si->setStateValidityChecker(std::make_shared<ValidityChecker>(si, distmap));
+    si->setMotionValidator(std::make_shared<LocalMotionValidator>(si, tree));
     si->setup();
 
     // Set our robot's starting state to be the bottom-left corner of

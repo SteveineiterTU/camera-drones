@@ -52,4 +52,4 @@ inside rviz add a "display" of typer "Marker" subscribed to the topic "/trajecto
 
 * To launch the octomap_server:
 
-roslaunch dla2_path_planner octomap_mapping_a2.launch
+roslaunch octomap_path_planner octomap_mapping_a2.launch

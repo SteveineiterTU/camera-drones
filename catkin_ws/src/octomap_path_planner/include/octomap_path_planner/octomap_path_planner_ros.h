@@ -93,6 +93,7 @@ private:
     std::list<double> clearence_list; 
 
     DynamicEDTOctomap *distmap;
+    octomap::OcTree *tree;
 
     // Our functions
  
