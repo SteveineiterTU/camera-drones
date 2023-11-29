@@ -39,3 +39,5 @@ CMakeCache.txt
 #catkin stuff
 catkin_ws/build
 catkin_ws/devel
+
+catkin_ws/logs
