@@ -5,7 +5,7 @@ Testing instructions
 rosrun octomap_path_planner octomap_path_planner_ros_node --runtime 15 --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2 --octomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt
 
 To use the max iterations handle:
-rosrun octomap_path_planner octomap_path_planner_ros_node --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2 --octomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt
+rosrun octomap_path_planner octomap_path_planner_ros_node --maxiterations 1000 --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2 --octomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt
 
 
 * To change the initial/current position run:
