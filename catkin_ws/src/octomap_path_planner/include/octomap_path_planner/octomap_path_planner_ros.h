@@ -64,6 +64,7 @@ private:
 
     // parsed arguments
     double runTime;
+    int optimizingPlannerMaxIterations;
     optimalPlanner plannerType;
     planningObjective objectiveType;
     std::string outputFile;

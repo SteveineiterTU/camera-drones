@@ -19,13 +19,17 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     traj_planning_successful(false)
 {   
     // Parse the arguments, returns true if successful, false otherwise
-    if (argParse(argc, argv, &runTime, &plannerType, &objectiveType, &outputFile, &octomapFile))
+    if (argParse(argc, argv, &runTime, &optimizingPlannerMaxIterations, &plannerType, &objectiveType, &outputFile, &octomapFile))
     {
         // Return with success
         ROS_INFO("OctomapPathPlanner::OctomapPathPlanner(...) argParse success!");
     } else {
         // Return with error - Modified argParse to make this equivalent to giving no arguments.
-        ROS_INFO("OctomapPathPlanner::OctomapPathPlanner(...) argParse error!");
+        ROS_INFO_STREAM("OctomapPathPlanner::OctomapPathPlanner(...) argParse error!"
+        << "\n  ===================================="
+        << "\n  Please EXIT the terminal (ctrl + C)."
+        << "\n  ====================================");
+        return; 
     }
 
     // ROS topics
@@ -40,7 +44,7 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     tree->readBinary(octomapFile);
     ROS_INFO_STREAM("read in tree, " << tree->getNumLeafNodes() << " leaves ");
 
-    // Setting up the dist map. I assume we have a static octomap aka do not have to change this map. 
+    // Setting up the dist map. I assume we have a static octomap aka we do not have to change this map. 
     // Also by having this in the clearance function for example it resulted in weird errors aka i could
     // not calculate any path (eg from 0 0 0 to 1 0 0)
     double a,b,c;
@@ -55,9 +59,8 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     //- the second argument is the octomap
     //- arguments 3 and 4 can be used to restrict the distance map to a subarea
     //- argument 5 defines whether unknown space is treated as occupied or free
-    //The constructor copies data but does not yet compute the distance map
+    // The constructor copies data but does not yet compute the distance map
     distmap = new DynamicEDTOctomap(maxDist, tree, min, max, unknownAsOccupied);
-
     //This computes the distance map
     distmap->update(); 
 }
@@ -140,8 +143,9 @@ void OctomapPathPlanner::printRelevantInformation() {
         && my_values[2] == goal_position.z
     );
     
+std::string additional_info = point_reached ? "" : " Altough we have NOT reached the given point.";
     ROS_INFO_STREAM(
-        "Path planning was successful." 
+        "Path planning was successful." << additional_info 
         << "\n  path_calculation_time: " << path_calculation_time.count() << "ms"
         << "\n  point_reached: " << point_reached
         << "\n  length: " << path_length
@@ -173,7 +177,7 @@ void OctomapPathPlanner::plan()
     auto start_time = std::chrono::high_resolution_clock::now();
 
     // Construct the robot state space in which we're planning. We're
-    // planning in [min, max]x[min, max]x[min, max], a subset of R^3.
+    // planning in (TODO CHANGE as we change the part below) [min, max]x[min, max]x[min, max], a subset of R^3.
     auto space(std::make_shared<ob::RealVectorStateSpace>(3));
 
     // Set the bounds of space to be in [min, max].
@@ -228,10 +232,12 @@ void OctomapPathPlanner::plan()
     optimizingPlanner->setup();
 
     ob::PlannerStatus solved = ob::PlannerStatus::UNKNOWN;
+// One of those two variables has to be set.
     if (runTime > 0) {
         solved = optimizingPlanner->solve(runTime);
-    } else {
-        solved = optimizingPlanner->solve(ompl::base::IterationTerminationCondition(1000));
+    } 
+    else if (optimizingPlannerMaxIterations > 0){
+        solved = optimizingPlanner->solve(ompl::base::IterationTerminationCondition(optimizingPlannerMaxIterations));
     }
     
     // Used to determine planing duration

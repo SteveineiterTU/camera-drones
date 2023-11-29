@@ -69,11 +69,9 @@ enum planningObjective
 };
 
 // Parse the command-line arguments
-bool argParse(int argc, char** argv, double *runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, std::string *octomap);
+bool argParse(int argc, char** argv, double *runTimePtr, int *optimizingPlannerMaxIterationsPtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, std::string *octomap);
 
 
-// TODO: passt the tree again, with that we can call tree.computeRayKeys(origin, end, keys) where origin is our current state and end is
-// the closest object i guess? After that we can call tree.search(keys) to check if something exists on this ray i guess.
 class ValidityChecker : public ob::StateValidityChecker
 {
 public:
@@ -105,14 +103,18 @@ public:
         float distance;
 
         _distmap->getDistanceAndClosestObstacle(p, distance, closestObst);
-        std::cout << "[DEBUG STUDENT] distance: " << distance << "\n";
-        //std::cout << "[DEBUG STUDENT] x: " << x << " y: " << y << " z: " << z << "\n";
-        // Assumption: z cannot be less then 0 aka the floor is at z = 0.
-        // distance = z < 0 ? -10 : distance;
+        // std::cout << "[DEBUG STUDENT] distance: " << distance << "\n";
+        // std::cout << "[DEBUG STUDENT] x: " << x << " y: " << y << " z: " << z << "\n";
+        // Assumption: z cannot be less then 0 aka the floor is at z = 0. TODO remove if we use an other approach of space.
+        // distance = z < 0 ? -10 : distance;  // Also this has led to an error lol.
         return distance != -1 ? distance : 100; 
     }
 };
 
+// Other approach with keys: 
+// 1. call tree.computeRayKeys(origin, end, keys) where origin is our current state and end is the closest object i guess? 
+// 2. After that we can call tree.search(keys) to check if something exists on this ray i guess.
+// 3. If something exsits on ray return false, else true.
 class LocalMotionValidator : public ob::MotionValidator
 {
 public:
@@ -142,11 +144,14 @@ public:
                 state_2->values[1] - state_1->values[1], 
                 state_2->values[2] - state_1->values[2]
             );
-            std::cout << "[DEBUG STUDENT] start: " << start << " end: " << end << " direction: " << direction << "\n";
-            octomap::point3d last_cell;
-            bool foo = _tree->castRay(start, direction, last_cell, false, -1); // TODO ponder if maxRange should be changed tho
-            std::cout << "[DEBUG STUDENT] Ray return value: " << foo << "\n";
-            return !foo; // True if somehting has been hit.
+                        octomap::point3d last_cell;
+            bool has_ray_hit_an_occupied_cell = _tree->castRay(start, direction, last_cell, false, -1); // TODO ponder if maxRange should be changed tho
+            
+            // std::cout << "[DEBUG STUDENT] start: " << start << " end: " << end << " direction: " << direction << "\n";
+            // std::cout << "[DEBUG STUDENT] Ray return value: " << foo << "\n";
+            
+            // has_ray_hit_an_occupied_cell = True if somehting has been hit. Therefore we need to negate it.
+            return !has_ray_hit_an_occupied_cell;
     }
 };
 
@@ -385,7 +390,7 @@ ob::OptimizationObjectivePtr getPathLengthObjWithCostToGo(const ob::SpaceInforma
 }
 
 /** Parse the command line arguments into a string for an output file and the planner/optimization types */
-bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, std::string *octomapFile)
+bool argParse(int argc, char** argv, double* runTimePtr, int* optimizingPlannerMaxIterationsPtr, optimalPlanner *plannerPtr, planningObjective *objectivePtr, std::string *outputFilePtr, std::string *octomapFile)
 {
     namespace bpo = boost::program_options;
 
@@ -394,7 +399,8 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
     desc.add_options()
         ("help,h", "produce help message")
         ("octomap", bpo::value<std::string>()->required(), "Specify the path/filename of the octomap to use.")
-        ("runtime,t", bpo::value<double>()->default_value(0), "(Optional) Specify the runtime in seconds. Defaults to 0, which means iteration number is used as stopping creteria. Else it must be greater than 0.")
+        ("runtime,t", bpo::value<double>()->default_value(1.5), "(Optional) Specify the runtime in seconds. Must be greater than 0. Default value 1.5 seconds.")
+        ("maxiterations,m", bpo::value<int>()->default_value(0), "(Optional) Specify the maximal iterations for early stopping. Must be greater than 0.")
         ("planner,p", bpo::value<std::string>()->default_value("RRTstar"), "(Optional) Specify the optimal planner to use, defaults to RRTstar if not given. Valid options are BFMTstar, BITstar, CForest, FMTstar, InformedRRTstar, PRMstar, RRTstar, and SORRTstar.") //Alphabetical order
         ("objective,o", bpo::value<std::string>()->default_value("PathLength"), "(Optional) Specify the optimization objective, defaults to PathLength if not given. Valid options are PathClearance, PathLength, ThresholdPathLength, and WeightedLengthAndClearanceCombo.") //Alphabetical order
         ("file,f", bpo::value<std::string>()->default_value(""), "(Optional) Specify an output path for the found solution path.")
@@ -434,13 +440,16 @@ bool argParse(int argc, char** argv, double* runTimePtr, optimalPlanner *planner
 
     // Get the runtime as a double
     *runTimePtr = vm["runtime"].as<double>();
+*optimizingPlannerMaxIterationsPtr = vm["maxiterations"].as<int>();
+    if (*runTimePtr == 1.5 && *optimizingPlannerMaxIterationsPtr > 0) {
+        *runTimePtr = 0.0;
+    }
 
     // Sanity check
-    if (*runTimePtr <= 0.0)
+    if ( !((*runTimePtr > 0.0) ^ (*optimizingPlannerMaxIterationsPtr > 0)) )
     {
-        // Currently we say if runtime is 0 then we use another early stopping procedure. TODO Change in future. 
-        // std::cout << "Invalid runtime." << std::endl << std::endl << desc << std::endl;
-        // return false;
+        std::cout << "Invalid runtime or maxiterations. Only ONE of those values has to be greater then 0." << std::endl << std::endl << desc << std::endl;
+        return false;
     }
 
     // Get the specified planner as a string
