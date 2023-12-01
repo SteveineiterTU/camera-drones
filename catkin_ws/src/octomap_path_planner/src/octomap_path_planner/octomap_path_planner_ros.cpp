@@ -185,17 +185,16 @@ void OctomapPathPlanner::plan()
     double x, y, z;
 
     tree->getMetricMin(x, y, z);
-    std::cout<<"Metric min: "<<x<<","<<y<<","<<z<<std::endl;
-    octomap::point3d min(x, y, z);
+    // std::cout<<"Metric min: "<<x<<","<<y<<","<<z<<std::endl;
+    bounds.setLow(0, x);
+    bounds.setLow(1, y);
+    bounds.setLow(2, z);
+    
     tree->getMetricMax(x, y, z);
-    std::cout<<"Metric max: "<<x<<","<<y<<","<<z<<std::endl;
-    octomap::point3d max(x, y, z);
-    bounds.setLow(0, min.x());
-    bounds.setLow(1, min.y());
-    bounds.setLow(2, min.z());
-    bounds.setHigh(0, max.x());
-    bounds.setHigh(1, max.y());
-    bounds.setHigh(2, max.z());
+    // std::cout<<"Metric max: "<<x<<","<<y<<","<<z<<std::endl;
+    bounds.setHigh(0, x);
+    bounds.setHigh(1, y);
+    bounds.setHigh(2, z);
 
     space->setBounds(bounds);
 
