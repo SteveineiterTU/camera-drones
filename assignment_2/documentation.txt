@@ -24,3 +24,6 @@ To run the examples of edt3d:
 Advantage of iteratrions over time:
   - We can quiete exactly say how much processpower we want to use, time could be worse in that regard. There a many other cooler metrics but its too hard for me atm to impelment xD
 
+Interesting finding: Really small runtime (eg 0.1, has at least once led to this behaviour) 
+leads to raycast beeing ingored - i guess because it can't get one run through? 
+
