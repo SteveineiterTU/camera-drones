@@ -85,7 +85,7 @@ public:
     bool isValid(const ob::State* state) const override
     {
         // return this->clearance(state) > 2.0;
-        return this->clearance(state) > 0;
+        return this->clearance(state) > 0.0;
     }
 
     // Returns the distance from the given state's position to octomap things.
@@ -105,8 +105,6 @@ public:
         _distmap->getDistanceAndClosestObstacle(p, distance, closestObst);
         // std::cout << "[DEBUG STUDENT] distance: " << distance << "\n";
         // std::cout << "[DEBUG STUDENT] x: " << x << " y: " << y << " z: " << z << "\n";
-        // Assumption: z cannot be less then 0 aka the floor is at z = 0. TODO remove if we use an other approach of space.
-        // distance = z < 0 ? -10 : distance;  // Also this has led to an error lol.
         return distance != -1 ? distance : 100; 
     }
 };

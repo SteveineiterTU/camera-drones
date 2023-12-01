@@ -47,11 +47,11 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     // Setting up the dist map. I assume we have a static octomap aka we do not have to change this map. 
     // Also by having this in the clearance function for example it resulted in weird errors aka i could
     // not calculate any path (eg from 0 0 0 to 1 0 0)
-    double a,b,c;
-    tree->getMetricMin(a,b,c);
-    octomap::point3d min(a,b,c);
-    tree->getMetricMax(a,b,c);
-    octomap::point3d max(a,b,c);
+    double x, y, z;
+    tree->getMetricMin(x, y, z);
+    octomap::point3d min(x, y, z);
+    tree->getMetricMax(x, y, z);
+    octomap::point3d max(x, y, z);
 
     bool unknownAsOccupied = false;
     float maxDist = 50.0;
@@ -180,17 +180,25 @@ void OctomapPathPlanner::plan()
     // planning in (TODO CHANGE as we change the part below) [min, max]x[min, max]x[min, max], a subset of R^3.
     auto space(std::make_shared<ob::RealVectorStateSpace>(3));
 
-    // Set the bounds of space to be in [min, max].
-    // double a, b, c;
-    // tree->getMetricMin(a,b,c);
-    // double minimum_value = std::min({a, b, c});
-    // std::cout<<"Metric min: "<<a<<","<<b<<","<<c<<std::endl;
-    // tree->getMetricMax(a,b,c);
-    // double maximum_value = std::max({a, b, c});
-    // std::cout<<"Metric max: "<<a<<","<<b<<","<<c<<std::endl;
-    // std::cout << minimum_value << " and max: " << maximum_value;
+    // Set the bounds of space to be in [min, max] of the passed octomap.
+    ompl::base::RealVectorBounds bounds(3);
+    double x, y, z;
 
-    space->setBounds(-100, 100); // TODO i guess we have to change those values?
+    tree->getMetricMin(x, y, z);
+    std::cout<<"Metric min: "<<x<<","<<y<<","<<z<<std::endl;
+    octomap::point3d min(x, y, z);
+    tree->getMetricMax(x, y, z);
+    std::cout<<"Metric max: "<<x<<","<<y<<","<<z<<std::endl;
+    octomap::point3d max(x, y, z);
+    bounds.setLow(0, min.x());
+    bounds.setLow(1, min.y());
+    bounds.setLow(2, min.z());
+    bounds.setHigh(0, max.x());
+    bounds.setHigh(1, max.y());
+    bounds.setHigh(2, max.z());
+
+    space->setBounds(bounds);
+
 
     // Construct a space information instance for this state space
     auto si(std::make_shared<ob::SpaceInformation>(space));
