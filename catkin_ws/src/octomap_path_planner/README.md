@@ -20,6 +20,11 @@ rostopic pub /octomap_path_planner/current_position geometry_msgs/Point "x: -14
 y: -8
 z: 5" --once
 
+power plant values of their image:
+rostopic pub /octomap_path_planner/current_position geometry_msgs/Point "x: 0
+y: 0
+z: 3" --once
+
 
 * To change the initial/goal position and plan a trajectory run:
 
@@ -38,6 +43,10 @@ rostopic pub /octomap_path_planner/goal_position geometry_msgs/Point "x: 7
 y: -17
 z: 1" --once
 
+power plant values of their image:
+rostopic pub /octomap_path_planner/goal_position geometry_msgs/Point "x: 10
+y: -27
+z: 15" --once
 
 * For  visualization run:
 rosrun octomap_path_planner octomap_path_planner_trajectory_visualization

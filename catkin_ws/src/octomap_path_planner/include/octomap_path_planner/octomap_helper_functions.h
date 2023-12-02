@@ -438,7 +438,7 @@ bool argParse(int argc, char** argv, double* runTimePtr, int* optimizingPlannerM
 
     // Get the runtime as a double
     *runTimePtr = vm["runtime"].as<double>();
-*optimizingPlannerMaxIterationsPtr = vm["maxiterations"].as<int>();
+    *optimizingPlannerMaxIterationsPtr = vm["maxiterations"].as<int>();
     if (*runTimePtr == 1.5 && *optimizingPlannerMaxIterationsPtr > 0) {
         *runTimePtr = 0.0;
     }

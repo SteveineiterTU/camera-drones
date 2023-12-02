@@ -239,7 +239,7 @@ void OctomapPathPlanner::plan()
     optimizingPlanner->setup();
 
     ob::PlannerStatus solved = ob::PlannerStatus::UNKNOWN;
-// One of those two variables has to be set.
+    // One of those two variables has to be set.
     if (runTime > 0) {
         solved = optimizingPlanner->solve(runTime);
     } 

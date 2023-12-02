@@ -47,7 +47,7 @@
 #include <memory>
 
 #include <fstream>
-// #include <any> // NOT working becuase we don't have C++17 and higher -.- man i wanted to use a map so badly for the informaion
+// #include <any> // NOT working becuase we don't have C++17 and higher -.- man i wanted to use a map so badly for the informaion xD
 #include <chrono>
 #include <list>
 #include <dynamicEDT3D/dynamicEDTOctomap.h>
