@@ -6,7 +6,7 @@ TMUX='byobu' #Options: tmux | byobu
 SOURCE='/home/student/.bashrc'
 
 # General
-cd /home/student
+cd /home/student/camera-drones
 
 # Script
 ${TMUX} has-session -t ${SESSION_NAME}
@@ -40,7 +40,7 @@ then
   #   rosbag play
   ${TMUX} send-keys -t ${SESSION_NAME}:1.3 'source $HOME/.bashrc' C-m
   ${TMUX} send-keys -t ${SESSION_NAME}:1.3 'rosparam set /use_sim_time true' C-m
-  ${TMUX} send-keys -t ${SESSION_NAME}:1.3 'rosbag play --clock --rate=0.25 camera-drones/assignment_1/2019-11-18-19-37-10.bag' C-m
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.3 'rosbag play --clock --rate=0.25 $HOME/camera-drones/assignment_1/2019-11-18-19-37-10.bag' C-m
   # Select bag window so we can pause it with space
   ${TMUX} select-window -t ${SESSION_NAME}:1.3
 fi
