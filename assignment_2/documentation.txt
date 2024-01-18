@@ -14,7 +14,6 @@ Need to run:
     target_link_libraries(${PROJECT_NAME}_ros 
       ${DYNAMICEDT3D_LIBRARIES}
     )
-
   
 
 To run the examples of edt3d:
@@ -27,3 +26,6 @@ Advantage of iteratrions over time:
 Interesting finding: Really small runtime (eg 0.1, has at least once led to this behaviour) 
 leads to raycast beeing ingored - i guess because it can't get one run through? 
 
+
+==================== Byobu script / RVIZ ============
+After running the script in ass2 one has to additionally select marker for the path (and then let it recalculate) as well as create a occupacy grid and select the binary.
