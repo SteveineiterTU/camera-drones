@@ -49,7 +49,7 @@ then
 
   # Send keys (see README in octomap path planner package for nice points)
   ${TMUX} send-keys -t ${SESSION_NAME}:1.1 'source $HOME/.bashrc' C-m
-  ${TMUX} send-keys -t ${SESSION_NAME}:1.1 'rostopic pub /octomap_path_planner/current_position geometry_msgs/Point "x: -14
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.1 'rostopic pub /octomap_path_planner/current_position geometry_msgs/Point "x: -14	
 y: -8 
 z: 5" --once' C-m
   sleep 4s
@@ -57,7 +57,10 @@ z: 5" --once' C-m
   ${TMUX} send-keys -t ${SESSION_NAME}:1.1 'rostopic pub /octomap_path_planner/goal_position geometry_msgs/Point "x: 28
 y: 8
 z: 1" --once' C-m
-  
+  # Trajectory Sampler
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.1 'rosrun trajectory_sampler' C-m  
+
+
   # Select unused window so we can debug (eg rostopic, rosnode, ..)
   ${TMUX} select-window -t ${SESSION_NAME}:1.6
 fi

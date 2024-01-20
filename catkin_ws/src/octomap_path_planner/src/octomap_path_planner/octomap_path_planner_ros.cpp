@@ -1,7 +1,8 @@
 /*
  * Octomap Path Planner ROS - octomap_path_planner_ros.cpp
  *
- *  Author: Stefan Schorkmeier <s.schoerkmeier@student.tugraz.at>
+ *  Authors: Stefan Schorkmeier <s.schoerkmeier@student.tugraz.at>
+ *           Florian Werkl <florian.werkl@student.tugraz.at>
  *  Created on: November 25, 2023
  *
  */

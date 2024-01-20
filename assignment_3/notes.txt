@@ -6,3 +6,6 @@ Source https://ompl.kavrakilab.org/PathSimplifier_8cpp_source.html
 
 
 Packages: ros-melodic-nlopt
+
+Ass Spec:
+Therefore, you will publish the raw planned path and the simplified path and you will need one TrajectoryVisualization node per trajectory that is to be visualized in RViz
