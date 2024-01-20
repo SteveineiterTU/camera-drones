@@ -1,0 +1,2 @@
+In order to start the trajectory visualization node, execute:
+roslaunch dla2_path_planner trajectory_visualization.launch marker_color:="O"
