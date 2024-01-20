@@ -1,4 +1,8 @@
 In order to start the trajectory visualization node, execute:
 roslaunch dla2_path_planner trajectory_visualization.launch marker_color:="O"
 
+Reference https://ompl.kavrakilab.org/classompl_1_1geometric_1_1PathSimplifier.html
+Source https://ompl.kavrakilab.org/PathSimplifier_8cpp_source.html
+
+
 Packages: ros-melodic-nlopt
