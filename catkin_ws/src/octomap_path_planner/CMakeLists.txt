@@ -15,6 +15,7 @@ find_package(ompl REQUIRED)
 # message(WARNING "OMPL_LIBRARIES: " ${OMPL_LIBRARIES})
 include_directories( ${OMPL_INCLUDE_DIRS} )
 link_directories( ${OMPL_LIBRARY_DIR} )
+
 set(EXTRA_LIBS
   ${EXTRA_LIBS}
   ${OMPL_LIBRARIES}
@@ -50,18 +51,32 @@ target_link_libraries(${PROJECT_NAME}_ros
     ${OCTOMAP_LIBRARIES}
 )
 
+# -------- Main Ros Node ---------
+
 set (EXTRA_LIBS
     ${EXTRA_LIBS}
     ${PROJECT_NAME}_ros)
 
 cs_add_executable(${PROJECT_NAME}_ros_node src/main_ros_node_octomap.cpp)
-
 target_link_libraries(${PROJECT_NAME}_ros_node ${EXTRA_LIBS})
 
 include_directories(../mav_trajectory_generation/mav_trajectory_generation/include)
 include_directories(../mav_trajectory_generation/mav_trajectory_generation_ros/include)
 
-# -----------------------------
+# --------------------------------
+
+# --- trajectory visualization --- 
+set(${PROJECT_NAME}_trajectory_visualization_ROS_NODE_SOURCES
+		include/trajectory_visualization/trajectory_visualization.h
+		src/trajectory_visualization/trajectory_visualization.cpp
+		src/trajectory_visualization_ros_node.cpp
+)
+cs_add_executable(${PROJECT_NAME}_trajectory_visualization ${octomap_path_planner_trajectory_visualization_ROS_NODE_SOURCES})
+target_link_libraries(${PROJECT_NAME}_trajectory_visualization
+		${catkin_LIBRARIES}
+)
+# --------------------------------
+
 ##########
 # EXPORT #
 ##########
