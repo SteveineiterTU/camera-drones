@@ -17,8 +17,12 @@
 OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, int argc, char** argv) :
     pnode_(pn),
     node_(n),
-    traj_planning_successful(false)
-{   
+    traj_planning_successful(false),
+    dt_(0.01),
+    current_sample_time_(0.0) { 
+    
+    pn.param("dt", dt_, dt_);
+
     // Parse the arguments, returns true if successful, false otherwise
     if (argParse(argc, argv, &runTime, &optimizingPlannerMaxIterations, &plannerType, &objectiveType, &outputFile, &octomapFile))
     {
@@ -37,6 +41,16 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     current_position_sub = pnode_.subscribe("current_position", 10, &OctomapPathPlanner::currentPositionCallback, this);
     goal_position_sub = pnode_.subscribe("goal_position", 10, &OctomapPathPlanner::goalPositionCallback, this);
     trajectory_pub = pnode_.advertise<mav_planning_msgs::PolynomialTrajectory4D>("planned_trajectory", 1);
+
+  smooth_trajectory4d_sub = pnode_.subscribe<mav_planning_msgs::PolynomialTrajectory4D>(
+    "smooth_trajectory4d", 10,
+    &OctomapPathPlanner::smoothTrajectory4DCallback, this);
+    const bool oneshot = false;
+    const bool autostart = false;
+    publish_timer_ = node_.createTimer(ros::Duration(dt_),
+                                   &OctomapPathPlanner::commandTimerCallback,
+                                   this, oneshot, autostart);
+    command_pub_ = pnode_.advertise<trajectory_msgs::MultiDOFJointTrajectory>("command/trajectory", 1);
 
     current_position.x = 0.; current_position.y = 0.; current_position.z = 0.;
     goal_position.x = 1.; goal_position.y = 1.; goal_position.z = 1.;
@@ -62,7 +76,7 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     //- argument 5 defines whether unknown space is treated as occupied or free
     // The constructor copies data but does not yet compute the distance map
     distmap = new DynamicEDTOctomap(maxDist, tree, min, max, unknownAsOccupied);
-    //This computes the distance map
+    //This computes the distance map 
     distmap->update(); 
 }
 
@@ -79,7 +93,7 @@ void OctomapPathPlanner::goalPositionCallback(const geometry_msgs::Point::ConstP
     goal_position = *p_msg;
     ROS_INFO_STREAM("New goal position, x: " << goal_position.x << "; y: " << goal_position.y << "; z: " << goal_position.z);
 
-    plan();
+    plan(goal_position);
 
     if (traj_planning_successful) {
         convertOMPLPathToMsg();
@@ -172,7 +186,7 @@ double OctomapPathPlanner::calculateAverageClearance() {
 }
 
 
-void OctomapPathPlanner::plan()
+void OctomapPathPlanner::plan(const geometry_msgs::Point &goal_pos)
 {
     // Used to determine planing duration
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -217,9 +231,9 @@ void OctomapPathPlanner::plan()
 
     // Set our robot's goal state to be the one entered by the user.
     ob::ScopedState<> goal(space);
-    goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal_position.x;
-    goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal_position.y;
-    goal->as<ob::RealVectorStateSpace::StateType>()->values[2] = goal_position.z;
+    goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal_pos.x;
+    goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal_pos.y;
+    goal->as<ob::RealVectorStateSpace::StateType>()->values[2] = goal_pos.z;
 
     // Create a problem instance
     auto pdef(std::make_shared<ob::ProblemDefinition>(si));
@@ -280,4 +294,78 @@ void OctomapPathPlanner::plan()
         traj_planning_successful = false;
     }
     path_calculation_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+}
+
+void OctomapPathPlanner::smoothTrajectory4DCallback(const mav_planning_msgs::PolynomialTrajectory4D::ConstPtr& p_msg) {
+  ROS_INFO("BEGIN: smoothTrajectory4DCallback(...)");
+  const mav_planning_msgs::PolynomialTrajectory4D &msg = *p_msg;
+
+  if (msg.segments.empty()) {
+    ROS_WARN("Trajectory sampler: received empty waypoint message");
+    return;
+  } else {
+    ROS_INFO("Trajectory sampler: received %lu waypoints", msg.segments.size());
+  }
+
+  ROS_INFO("Received trajectory print-out...");
+  std::cout << "header:" << msg.header << std::endl;
+  { // print-out trajectory, I do this because rostopic echo breaks when receiving a message of this type
+    int i = 0;
+    for (auto it=msg.segments.begin(); it!=msg.segments.end(); it++) {
+      std::cout <<
+        "segment["<<i<<"]"<<
+        *it << std::endl;
+      i++;
+    }
+  }
+
+  bool success = mav_trajectory_generation::polynomialTrajectoryMsgToTrajectory( msg, &trajectory_);
+  if (!success) {
+    return;
+  }
+  processTrajectory();
+
+  ROS_INFO("END:   smoothTrajectory4DCallback(...)");
+}
+
+void OctomapPathPlanner::processTrajectory() {
+  publish_timer_.stop();
+  publish_timer_.start();
+  current_sample_time_ = 0.0;
+  start_time_ = ros::Time::now();
+}
+
+void OctomapPathPlanner::commandTimerCallback(const ros::TimerEvent&) {
+  if (current_sample_time_ <= trajectory_.getMaxTime()) {
+    trajectory_msgs::MultiDOFJointTrajectory msg;
+    mav_msgs::EigenTrajectoryPoint trajectory_point;
+    bool success = mav_trajectory_generation::sampleTrajectoryAtTime(
+        trajectory_, current_sample_time_, &trajectory_point);
+    if (!success) {
+      publish_timer_.stop();
+    }
+    mav_msgs::msgMultiDofJointTrajectoryFromEigen(trajectory_point, &msg);
+    msg.points[0].time_from_start = ros::Duration(current_sample_time_);
+    ros::Time current_ideal_time_ = start_time_ + ros::Duration(current_sample_time_);
+    msg.header.frame_id = "world";
+    std::string child_frame_id("state_ref");
+    msg.header.stamp = current_ideal_time_;
+    command_pub_.publish(msg);
+    current_sample_time_ += dt_;
+
+    {
+      tf::Transform transform;
+      const geometry_msgs::Vector3 &t = msg.points[0].transforms[0].translation;
+      const geometry_msgs::Quaternion &q = msg.points[0].transforms[0].rotation;
+      transform.setOrigin(tf::Vector3( t.x, t.y, t.z));
+      transform.setRotation(tf::Quaternion( q.x, q.y, q.z, q.w));
+      tf_broadcaster_.sendTransform(
+          tf::StampedTransform(
+              transform, current_ideal_time_,
+              msg.header.frame_id, child_frame_id));
+    }
+
+  } else {
+    publish_timer_.stop();
+  }
 }

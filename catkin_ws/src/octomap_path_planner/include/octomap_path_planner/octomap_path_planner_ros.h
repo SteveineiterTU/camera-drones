@@ -1,7 +1,8 @@
 /*
  * Octomap Path Planner ROS - octomap_path_planner_ros.h
  *
- *  Author: Stefan Schorkmeier <s.schoerkmeier@student.tugraz.at>
+ *  Authors: Stefan Schorkmeier <s.schoerkmeier@student.tugraz.at>
+ *           Florian Werkl <florian.werkl@student.tugraz.at>
  *  Created on: November 25, 2023
  *
  */
@@ -52,6 +53,15 @@
 #include <list>
 #include <dynamicEDT3D/dynamicEDTOctomap.h>
 
+// Ass 3 additions
+#include <tf/transform_broadcaster.h>
+#include <mav_planning_msgs/PolynomialTrajectory4D.h>
+#include <mav_trajectory_generation/polynomial.h>
+#include <mav_trajectory_generation/trajectory_sampling.h>
+#include <mav_trajectory_generation_ros/ros_conversions.h>
+#include <trajectory_msgs/MultiDOFJointTrajectory.h>
+#include <mav_msgs/conversions.h>
+
 class OctomapPathPlanner
 {
 public:
@@ -69,8 +79,12 @@ private:
     planningObjective objectiveType;
     std::string outputFile;
     std::string octomapFile;
-
-    void plan();
+    
+    // Our functions
+    void plan(const geometry_msgs::Point &goal_pos);
+    void commandTimerCallback(const ros::TimerEvent&);
+    void processTrajectory();
+    
 
     // ROS Topics
     ros::Subscriber current_position_sub;
@@ -85,18 +99,29 @@ private:
     bool traj_planning_successful;
     std::shared_ptr<ompl::geometric::PathGeometric> p_last_traj_ompl;
     mav_planning_msgs::PolynomialTrajectory4D last_traj_msg;
+    ros::Subscriber smooth_trajectory4d_sub;
+    void smoothTrajectory4DCallback(const mav_planning_msgs::PolynomialTrajectory4D::ConstPtr& p_msg);
 
+    // The trajectory to sub-sample.
+    mav_trajectory_generation::Trajectory trajectory_;
+    ros::Timer publish_timer_;
+    tf::TransformBroadcaster tf_broadcaster_;
+    ros::Publisher command_pub_;
+    
     // Our Variables
     // std::map<std::string, std::variant<int, double>> relevant_path_information;
     double path_length;
     double path_cost;
     std::chrono::milliseconds path_calculation_time;
     std::list<double> clearence_list; 
-
+    // Trajectory sampling interval.
+    double dt_;
+    // Time at currently published trajectory sample.
+    double current_sample_time_;
+    ros::Time start_time_;
     DynamicEDTOctomap *distmap;
     octomap::OcTree *tree;
 
-    // Our functions
  
 };
 
