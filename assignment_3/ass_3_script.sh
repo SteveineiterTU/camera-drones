@@ -33,10 +33,10 @@ then
 
   #    Path planner ros node
   ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'source $HOME/.bashrc' C-m
-  ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'rosrun octomap_path_planner octomap_path_planner_ros_node trajectory_visualization --runtime 15 --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2 --octomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt' C-m
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'rosrun octomap_path_planner octomap_path_planner_ros_node trajectory_visualization --runtime 15 --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2' C-m
   #    Octomap server 
   ${TMUX} send-keys -t ${SESSION_NAME}:1.2 'source $HOME/.bashrc' C-m
-  ${TMUX} send-keys -t ${SESSION_NAME}:1.2 'roslaunch octomap_path_planner octomap_mapping_a2.launch --wait' C-m
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.2 'roslaunch octomap_path_planner octomap_mapping_a2.launch --octomap $HOME/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt --wait' C-m
   #    Set a local transform so we can use world.
   ${TMUX} send-keys -t ${SESSION_NAME}:1.3 'source $HOME/.bashrc' C-m
   ${TMUX} send-keys -t ${SESSION_NAME}:1.3 'rosrun tf static_transform_publisher 0 0 0 0 0 0 1 world my_frame 10' C-m
@@ -58,7 +58,8 @@ z: 5" --once' C-m
 y: 8
 z: 1" --once' C-m
   # Trajectory Sampler
-  ${TMUX} send-keys -t ${SESSION_NAME}:1.1 'rosrun trajectory_sampler' C-m  
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.4 'source $HOME/.bashrc' C-m
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.4 'rosrun trajectory_planner trajectory_planner.launch --dt 0.01' C-m  
 
 
   # Select unused window so we can debug (eg rostopic, rosnode, ..)

@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
   ros::NodeHandle pnh("~");
 
   ROS_INFO("Starting DLA3TrajectorySampler...");
-  DLA3TrajectorySampler trajectory_sampler(nh, pnh);
+  TrajectorySampler trajectory_sampler(nh, pnh);
   ROS_INFO("DLA3TrajectorySampler started...");
   
   ros::spin();

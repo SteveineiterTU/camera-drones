@@ -24,9 +24,9 @@
 #include <mav_msgs/conversions.h>
 #include <tf/transform_broadcaster.h>
 
-class DLA3TrajectorySampler {
+class TrajectorySampler {
  public:
-  DLA3TrajectorySampler(ros::NodeHandle& nh, ros::NodeHandle& pnh);
+  TrajectorySampler(ros::NodeHandle& nh, ros::NodeHandle& pnh);
 
 private:
   ros::NodeHandle& nh_, pnh_;

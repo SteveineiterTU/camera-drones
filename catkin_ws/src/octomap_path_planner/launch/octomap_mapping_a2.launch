@@ -7,8 +7,11 @@
   www.ros.org/wiki/octomap_server for details  
 -->
 <launch>
+    <arg name="octomap" default="$(find octomap_path_planner)/maps/power_plant.bt"/>
+
+    <!--- Octomap server
 	<node pkg="octomap_server" type="octomap_server_node" name="octomap_server" 
-		args="$(find octomap_path_planner)/maps/power_plant.bt" 
+		args="$(octomap)" 
     	output="screen">
 		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
         <param name="latch" value="true" />

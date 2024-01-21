@@ -13,7 +13,7 @@
 
 #include "trajectory_planner.h"
 
-DLA3TrajectorySampler::DLA3TrajectorySampler(ros::NodeHandle& nh, ros::NodeHandle& pnh) :
+TrajectorySampler::TrajectorySampler(ros::NodeHandle& nh, ros::NodeHandle& pnh) :
   nh_(nh), pnh_(pnh),
   dt_(0.01),
   current_sample_time_(0.0) {
@@ -21,17 +21,17 @@ DLA3TrajectorySampler::DLA3TrajectorySampler(ros::NodeHandle& nh, ros::NodeHandl
 
   smooth_trajectory4d_sub = pnh_.subscribe<mav_planning_msgs::PolynomialTrajectory4D>(
     "smooth_trajectory4d", 10,
-    &DLA3TrajectorySampler::smoothTrajectory4DCallback, this);
+    &TrajectorySampler::smoothTrajectory4DCallback, this);
   
   const bool oneshot = false;
   const bool autostart = false;
   publish_timer_ = nh_.createTimer(ros::Duration(dt_),
-                                   &DLA3TrajectorySampler::commandTimerCallback,
+                                   &TrajectorySampler::commandTimerCallback,
                                    this, oneshot, autostart);
   command_pub_ = pnh_.advertise<trajectory_msgs::MultiDOFJointTrajectory>("command/trajectory", 1);
 }
 
-void DLA3TrajectorySampler::smoothTrajectory4DCallback(const mav_planning_msgs::PolynomialTrajectory4D::ConstPtr& p_msg) {
+void TrajectorySampler::smoothTrajectory4DCallback(const mav_planning_msgs::PolynomialTrajectory4D::ConstPtr& p_msg) {
   ROS_INFO("BEGIN: smoothTrajectory4DCallback(...)");
   const mav_planning_msgs::PolynomialTrajectory4D &msg = *p_msg;
 
@@ -63,14 +63,14 @@ void DLA3TrajectorySampler::smoothTrajectory4DCallback(const mav_planning_msgs::
   ROS_INFO("END:   smoothTrajectory4DCallback(...)");
 }
 
-void DLA3TrajectorySampler::processTrajectory() {
+void TrajectorySampler::processTrajectory() {
   publish_timer_.stop();
   publish_timer_.start();
   current_sample_time_ = 0.0;
   start_time_ = ros::Time::now();
 }
 
-void DLA3TrajectorySampler::commandTimerCallback(const ros::TimerEvent&) {
+void TrajectorySampler::commandTimerCallback(const ros::TimerEvent&) {
   if (current_sample_time_ <= trajectory_.getMaxTime()) {
     trajectory_msgs::MultiDOFJointTrajectory msg;
     mav_msgs::EigenTrajectoryPoint trajectory_point;
