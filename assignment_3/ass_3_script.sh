@@ -59,7 +59,7 @@ y: 8
 z: 1" --once' C-m
   # Trajectory Sampler
   ${TMUX} send-keys -t ${SESSION_NAME}:1.4 'source $HOME/.bashrc' C-m
-  ${TMUX} send-keys -t ${SESSION_NAME}:1.4 'rosrun trajectory_planner trajectory_planner.launch --dt:=0.01' C-m  
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.4 'roslaunch trajectory_planner trajectory_planner.launch --dt:=0.01' C-m  
 
 
   # Select unused window so we can debug (eg rostopic, rosnode, ..)
