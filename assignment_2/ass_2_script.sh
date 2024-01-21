@@ -33,7 +33,7 @@ then
 
   #    Path planner ros node
   ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'source $HOME/.bashrc' C-m
-  ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'rosrun octomap_path_planner octomap_path_planner_ros_node --runtime 15 --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2 --octomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt' C-m
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'rosrun octomap_path_planner octomap_path_planner_ros_node --runtime 15 --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2 --octomap:=/home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt' C-m
   #    Octomap server 
   ${TMUX} send-keys -t ${SESSION_NAME}:1.2 'source $HOME/.bashrc' C-m
   ${TMUX} send-keys -t ${SESSION_NAME}:1.2 'roslaunch octomap_path_planner octomap_mapping_a2.launch --wait' C-m

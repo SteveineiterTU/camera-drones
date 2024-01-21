@@ -11,7 +11,7 @@
 
     <!--  Octomap server -->
 	<node pkg="octomap_server" type="octomap_server_node" name="octomap_server" 
-		args="$(octomap)" 
+		args="$(arg octomap)" 
     	output="screen">
 		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
         <param name="latch" value="true" />
