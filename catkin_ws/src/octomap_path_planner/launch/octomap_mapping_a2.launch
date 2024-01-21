@@ -9,7 +9,7 @@
 <launch>
     <arg name="octomap" default="$(find octomap_path_planner)/maps/power_plant.bt"/>
 
-    <!--- Octomap server
+    <!--  Octomap server -->
 	<node pkg="octomap_server" type="octomap_server_node" name="octomap_server" 
 		args="$(octomap)" 
     	output="screen">
