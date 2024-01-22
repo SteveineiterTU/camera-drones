@@ -37,10 +37,7 @@
 
  /* Author: Ioan Sucan, Ryan Luna */
   
- #include "ompl/geometric/PathSimplifier.h"
- #include "ompl/tools/config/MagicConstants.h"
- #include "ompl/base/objectives/PathLengthOptimizationObjective.h"
- #include "ompl/base/StateSampler.h"
+
  #include <algorithm>
  #include <limits>
  #include <cstdlib>

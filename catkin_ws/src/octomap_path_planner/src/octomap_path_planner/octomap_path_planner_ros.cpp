@@ -12,6 +12,7 @@
 #include <octomap/octomap.h>
 #include <octomap/OcTree.h>
 
+
 #include <cmath>
 
 OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, int argc, char** argv) :
@@ -368,4 +369,24 @@ void OctomapPathPlanner::commandTimerCallback(const ros::TimerEvent&) {
   } else {
     publish_timer_.stop();
   }
+}
+
+void OctomapPathPlanner::simplifyPath(std::vector<ompl::geometric::PathGeometric *> paths, int runs=20)
+{
+    ompl::base::OptimizationObjectivePtr obj(new ompl::base::PathLengthOptimizationObjective(si_));
+    ompl::geometric::PathSimplifier simplifier(si_, ompl::base::GoalPtr(), obj);
+    for (int path_idx = 0; path_idx < 2; path_idx++)
+    {
+        double avg_costs = 0.0;
+        ompl::base::Cost original_cost = paths[path_idx]->cost(obj);
+        ompl::geometric::PathGeometric *path;
+        for (int i = 0; i < runs; i++)
+        {
+            path = new ompl::geometric::PathGeometric(*paths[path_idx]);
+            simplifier.shortcutPath(*path, 100, 100, 0.33, 0.005);
+            avg_costs += path->cost(obj).value();
+        }
+        avg_costs /= runs;
+        printf("Average cost: %f, original cost: %f\n", avg_costs, original_cost.value());
+    }
 }

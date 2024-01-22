@@ -25,7 +25,6 @@
 #include <ompl/base/objectives/StateCostIntegralObjective.h>
 #include <ompl/base/objectives/MaximizeMinClearanceObjective.h>
 #include <ompl/base/spaces/RealVectorStateSpace.h>
-#include <ompl/geometric/PathGeometric.h>
 // For ompl::msg::setLogLevel
 #include "ompl/util/Console.h"
 
@@ -39,6 +38,8 @@
 #include <ompl/geometric/planners/rrt/RRTstar.h>
 #include <ompl/geometric/planners/rrt/SORRTstar.h>
 
+#include <ompl/geometric/PathGeometric.h>
+#include <ompl/geometric/PathSimplifier.h>
 
 // For boost program options
 #include <boost/program_options.hpp>
@@ -61,6 +62,8 @@
 #include <mav_trajectory_generation_ros/ros_conversions.h>
 #include <trajectory_msgs/MultiDOFJointTrajectory.h>
 #include <mav_msgs/conversions.h>
+#include <ompl/geometric/PathSimplifier.h>
+#include <ompl/geometric/PathGeometric.h>
 
 class OctomapPathPlanner
 {
@@ -84,7 +87,7 @@ private:
     void plan(const geometry_msgs::Point &goal_pos);
     void commandTimerCallback(const ros::TimerEvent&);
     void processTrajectory();
-    
+    void simplifyPath(std::vector<ompl::geometric::PathGeometric *> paths, int runs);
 
     // ROS Topics
     ros::Subscriber current_position_sub;
@@ -121,7 +124,7 @@ private:
     ros::Time start_time_;
     DynamicEDTOctomap *distmap;
     octomap::OcTree *tree;
-
+    ompl::base::SpaceInformationPtr si_;
  
 };
 
