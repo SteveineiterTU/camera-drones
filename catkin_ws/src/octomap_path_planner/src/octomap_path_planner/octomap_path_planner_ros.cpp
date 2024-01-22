@@ -23,7 +23,7 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     current_sample_time_(0.0) { 
     
     const double dt_default = 0.01;
-    dt_(dt_default);
+    dt_ = dt_default;
 
     // Parse the arguments, returns true if successful, false otherwise
     if (argParse(argc, argv, &runTime, &optimizingPlannerMaxIterations, &plannerType, &objectiveType, &outputFile, &octomapFile))
