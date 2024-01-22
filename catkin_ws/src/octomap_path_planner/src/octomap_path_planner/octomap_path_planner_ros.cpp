@@ -105,8 +105,8 @@ void OctomapPathPlanner::goalPositionCallback(const geometry_msgs::Point::ConstP
             mav_planning_msgs::PolynomialTrajectory4D::Ptr( new mav_planning_msgs::PolynomialTrajectory4D( last_traj_msg ) );
         trajectory_pub.publish(last_traj_msg);
         
-        // convertOMPLPathToMsg(p_simplified_ompl, last_simpl_traj_msg);
-        // simplified_trajectory_pub.publish(last_simpl_traj_msg);
+        convertOMPLPathToMsg(p_simplified_ompl, last_simpl_traj_msg);
+        simplified_trajectory_pub.publish(last_simpl_traj_msg);
     }
     printRelevantInformation();
 }
@@ -309,7 +309,7 @@ void OctomapPathPlanner::plan(const geometry_msgs::Point &goal_pos)
 
         p_last_traj_ompl =  std::static_pointer_cast<ompl::geometric::PathGeometric>(pdef->getSolutionPath());
 
-        // simplifyPath(p_last_traj_ompl,20);
+        simplifyPath(p_last_traj_ompl,20);
 
         traj_planning_successful = true;
     } else {
