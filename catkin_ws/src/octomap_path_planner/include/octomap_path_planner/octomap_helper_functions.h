@@ -143,7 +143,7 @@ public:
                 state_2->values[2] - state_1->values[2]
             );
                         octomap::point3d last_cell;
-            bool has_ray_hit_an_occupied_cell = _tree->castRay(start, direction, last_cell, false, -1); // TODO ponder if maxRange should be changed tho
+            bool has_ray_hit_an_occupied_cell = _tree->castRay(start, direction, last_cell, false, 0.1); // TODO ponder if maxRange should be changed tho
             
             // std::cout << "[DEBUG STUDENT] start: " << start << " end: " << end << " direction: " << direction << "\n";
             // std::cout << "[DEBUG STUDENT] Ray return value: " << foo << "\n";
