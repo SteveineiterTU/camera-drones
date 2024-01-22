@@ -42,10 +42,11 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     current_position_sub = pnode_.subscribe("current_position", 10, &OctomapPathPlanner::currentPositionCallback, this);
     goal_position_sub = pnode_.subscribe("goal_position", 10, &OctomapPathPlanner::goalPositionCallback, this);
     trajectory_pub = pnode_.advertise<mav_planning_msgs::PolynomialTrajectory4D>("planned_trajectory", 1);
+    simplified_trajectory_pub = pnode_.advertise<mav_planning_msgs::PolynomialTrajectory4D>("simplified_trajectory", 1);
 
-  smooth_trajectory4d_sub = pnode_.subscribe<mav_planning_msgs::PolynomialTrajectory4D>(
-    "smooth_trajectory4d", 10,
-    &OctomapPathPlanner::smoothTrajectory4DCallback, this);
+//  smooth_trajectory4d_sub = pnode_.subscribe<mav_planning_msgs::PolynomialTrajectory4D>(
+//    "smooth_trajectory4d", 10,
+//    &OctomapPathPlanner::smoothTrajectory4DCallback, this); might be important later
     const bool oneshot = false;
     const bool autostart = false;
     publish_timer_ = node_.createTimer(ros::Duration(dt_),
@@ -97,22 +98,26 @@ void OctomapPathPlanner::goalPositionCallback(const geometry_msgs::Point::ConstP
     plan(goal_position);
 
     if (traj_planning_successful) {
-        convertOMPLPathToMsg();
+        calcClearance(p_last_traj_ompl, clearence_list);
+        convertOMPLPathToMsg(p_last_traj_ompl, last_traj_msg);
         mav_planning_msgs::PolynomialTrajectory4D::Ptr p_traj_msg = 
             mav_planning_msgs::PolynomialTrajectory4D::Ptr( new mav_planning_msgs::PolynomialTrajectory4D( last_traj_msg ) );
         trajectory_pub.publish(last_traj_msg);
+        
+        convertOMPLPathToMsg(p_simplified_ompl, last_simpl_traj_msg);
+        simplified_trajectory_pub.publish(last_simpl_traj_msg);
     }
     printRelevantInformation();
 }
 
-void OctomapPathPlanner::convertOMPLPathToMsg() {
-    mav_planning_msgs::PolynomialTrajectory4D &msg = last_traj_msg;
+void OctomapPathPlanner::convertOMPLPathToMsg(std::shared_ptr<ompl::geometric::PathGeometric> path, mav_planning_msgs::PolynomialTrajectory4D &msg) {
+
     msg.segments.clear();
 
     msg.header.stamp = ros::Time::now();
     msg.header.frame_id = "world"; // "odom"
 
-    std::vector<ompl::base::State *> &states = p_last_traj_ompl->getStates();
+    std::vector<ompl::base::State *> &states = path->getStates();
     size_t N = states.size();
     for (size_t i = 0; i<N; i++) {
         ompl::base::State *p_s = states[i];
@@ -122,13 +127,10 @@ void OctomapPathPlanner::convertOMPLPathToMsg() {
         double &yaw_s = p_s->as<ob::RealVectorStateSpace::StateType>()->values[3];
         ROS_INFO_STREAM("states["<< i <<"], x_s: " << x_s << "; y_s: " << y_s << "; z_s: " << z_s << "; yaw_s: " << yaw_s);
 
-        // Calculate clearance here and push it on a list
-        clearence_list.push_back(sqrt((x_s-0.5)*(x_s-0.5) + (y_s-0.5)*(y_s-0.5) + (z_s-0.5)*(z_s-0.5)) - 0.25);
-
         mav_planning_msgs::PolynomialSegment4D segment;
         segment.header = msg.header;
         segment.num_coeffs = 0;
-        segment.segment_time = ros::Duration(0.);
+        segment.segment_time = ros::Duration(current_sample_time_);
         
         segment.x.push_back(x_s);
         segment.y.push_back(y_s);
@@ -137,6 +139,21 @@ void OctomapPathPlanner::convertOMPLPathToMsg() {
         msg.segments.push_back(segment);
     }
 
+}
+
+void OctomapPathPlanner::calcClearance(std::shared_ptr<ompl::geometric::PathGeometric> path, std::list<double> &clearence)
+{
+    std::vector<ompl::base::State *> &states = path->getStates();
+    size_t N = states.size();
+    for (size_t i = 0; i<N; i++) {
+        ompl::base::State *p_s = states[i];
+        const double &x_s = p_s->as<ob::RealVectorStateSpace::StateType>()->values[0];
+        const double &y_s = p_s->as<ob::RealVectorStateSpace::StateType>()->values[1];
+        double &z_s = p_s->as<ob::RealVectorStateSpace::StateType>()->values[2];
+        double &yaw_s = p_s->as<ob::RealVectorStateSpace::StateType>()->values[3];
+        // Calculate clearance here and push it on a list
+        clearence.push_back(sqrt((x_s-0.5)*(x_s-0.5) + (y_s-0.5)*(y_s-0.5) + (z_s-0.5)*(z_s-0.5)) - 0.25);
+    }
 }
 
 void OctomapPathPlanner::printRelevantInformation() {
@@ -382,17 +399,24 @@ void OctomapPathPlanner::simplifyPath(std::shared_ptr<ompl::geometric::PathGeome
     std::cout << "Simplification started." << std::endl;
     ompl::base::OptimizationObjectivePtr obj(new ompl::base::PathLengthOptimizationObjective(si_));
 //    auto simplified = std::make_shared<ompl::geometric::PathGeometric>(ompl::geometric::PathGeometric(*path));
-    *p_simplified = *path;
+    *p_simplified_ompl = *path;
 
     ompl::geometric::PathSimplifier simplifier(si_, ompl::base::GoalPtr(), obj);
-    
+    double snap_to_vertex = 0.025; //// 0.05 (less points) // 0.025 (quite good) // 0.01 (more points) // original value: 0.005
     double avg_costs = 0.0;
     ompl::base::Cost original_cost = path->cost(obj);
     for (int i = 0; i < runs; i++)
     {
-        simplifier.shortcutPath(*p_simplified, 100, 100, 0.33, 0.005);
-        avg_costs += p_simplified->cost(obj).value();
+        simplifier.perturbPath(*p_simplified_ompl, 100, 100, 0.33, snap_to_vertex);
+        simplifier.shortcutPath(*p_simplified_ompl, 100, 100, 0.33, snap_to_vertex);
+        avg_costs += p_simplified_ompl->cost(obj).value();
     }
+
+    /*Note: each pass of this smoother roughly duplicates the number of vertices, which
+    strongly affects the runtime of the trajectory smoothing / generation routine which will
+    be utilized in the next steps of this task. Performing only 1 pass of the BSpline smoother
+    will provide a good trade-off between smoothness and runtime for the next part.*/
+    simplifier.smoothBSpline(*p_simplified_ompl, 1); // 1-2 passes
 
     avg_costs /= runs;
     printf("Average cost: %f, original cost: %f\n", avg_costs, original_cost.value());

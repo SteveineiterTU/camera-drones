@@ -88,22 +88,25 @@ private:
     void commandTimerCallback(const ros::TimerEvent&);
     void processTrajectory();
     void simplifyPath(std::shared_ptr<ompl::geometric::PathGeometric> path, int runs);
+    void calcClearance(std::shared_ptr<ompl::geometric::PathGeometric> path, std::list<double> &clearence);
 
     // ROS Topics
     ros::Subscriber current_position_sub;
     ros::Subscriber goal_position_sub;
     ros::Publisher trajectory_pub;
+    ros::Publisher simplified_trajectory_pub;
     void currentPositionCallback(const geometry_msgs::Point::ConstPtr& p_msg);
     void goalPositionCallback(const geometry_msgs::Point::ConstPtr& p_msg);
-    void convertOMPLPathToMsg();
+    void convertOMPLPathToMsg(std::shared_ptr<ompl::geometric::PathGeometric> path, mav_planning_msgs::PolynomialTrajectory4D &msg);
     void printRelevantInformation();
     double calculateAverageClearance();
     geometry_msgs::Point current_position, goal_position;
     bool traj_planning_successful;
     std::shared_ptr<ompl::geometric::PathGeometric> p_last_traj_ompl;
-    std::shared_ptr<ompl::geometric::PathGeometric> p_simplified;
+    std::shared_ptr<ompl::geometric::PathGeometric> p_simplified_ompl;
     
     mav_planning_msgs::PolynomialTrajectory4D last_traj_msg;
+    mav_planning_msgs::PolynomialTrajectory4D last_simpl_traj_msg;
     ros::Subscriber smooth_trajectory4d_sub;
     void smoothTrajectory4DCallback(const mav_planning_msgs::PolynomialTrajectory4D::ConstPtr& p_msg);
 
