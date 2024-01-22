@@ -29,14 +29,16 @@ then
   ${TMUX} split-window -h -t ${SESSION_NAME}:1.2
   ${TMUX} split-window -v -t ${SESSION_NAME}:1.2
   ${TMUX} split-window -v -t ${SESSION_NAME}:1.4
+
   ${TMUX} new-window -n acitve_stuff -t ${SESSION_NAME}
- ${TMUX} split-window -v -t ${SESSION_NAME}:2
+  ${TMUX} split-window -v -t ${SESSION_NAME}:2
   ${TMUX} split-window -h -t ${SESSION_NAME}:2.0
   ${TMUX} split-window -h -t ${SESSION_NAME}:2.2
 
+     # Nodes passive
   #    Path planner ros node
   ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'source $HOME/.bashrc' C-m
-  ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'rosrun octomap_path_planner octomap_path_planner_ros_node trajectory_visualization --runtime 15 --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2 --octomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt' C-m
+  ${TMUX} send-keys -t ${SESSION_NAME}:1.0 'rosrun octomap_path_planner octomap_path_planner_ros_node trajectory_visualization --runtime 3 --planner RRTStar -o WeightedLengthAndClearanceCombo -f planner_trajectory.txt --info 2 --octomap /home/student/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt' C-m
   #    Octomap server 
   ${TMUX} send-keys -t ${SESSION_NAME}:1.1 'source $HOME/.bashrc' C-m
   ${TMUX} send-keys -t ${SESSION_NAME}:1.1 'roslaunch octomap_path_planner octomap_mapping_a2.launch octomap:=$HOME/camera-drones/catkin_ws/src/octomap_path_planner/maps/power_plant.bt --wait' C-m
@@ -61,9 +63,9 @@ y: 8
 z: 5" --once' C-m
   sleep 4s
   ${TMUX} send-keys -t ${SESSION_NAME}:2.2 'source $HOME/.bashrc' C-m
-  ${TMUX} send-keys -t ${SESSION_NAME}:2.2 'rostopic pub /octomap_path_planner/goal_position geometry_msgs/Point "x: 28
+  ${TMUX} send-keys -t ${SESSION_NAME}:2.2 'rostopic pub /octomap_path_planner/goal_position geometry_msgs/Point "x: 14
 y: 8
-z: 1" --once' C-m
+z: 20" --once' C-m
   sleep 4s
 
   # Select unused window so we can debug (eg rostopic, rosnode, ..)
