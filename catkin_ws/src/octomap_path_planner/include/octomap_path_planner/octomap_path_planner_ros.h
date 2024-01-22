@@ -130,7 +130,7 @@ private:
     DynamicEDTOctomap *distmap;
     octomap::OcTree *tree;
     ompl::base::SpaceInformationPtr si_;
- 
+    std::shared_ptr<ob::RealVectorStateSpace> space_; // bounds n' shit
 };
 
 #endif // OCTOMAP_PATH_PLANNER_H_

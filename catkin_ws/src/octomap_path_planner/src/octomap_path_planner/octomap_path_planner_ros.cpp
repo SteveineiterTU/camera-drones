@@ -61,11 +61,10 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     tree = new octomap::OcTree(0.05);
     tree->readBinary(octomapFile);
     ROS_INFO_STREAM("read in tree, " << tree->getNumLeafNodes() << " leaves ");
-
+    double x, y, z;
     // Setting up the dist map. I assume we have a static octomap aka we do not have to change this map. 
     // Also by having this in the clearance function for example it resulted in weird errors aka i could
     // not calculate any path (eg from 0 0 0 to 1 0 0)
-    double x, y, z;
     tree->getMetricMin(x, y, z);
     octomap::point3d min(x, y, z);
     tree->getMetricMax(x, y, z);
@@ -80,7 +79,37 @@ OctomapPathPlanner::OctomapPathPlanner(ros::NodeHandle &n, ros::NodeHandle &pn, 
     // The constructor copies data but does not yet compute the distance map
     distmap = new DynamicEDTOctomap(maxDist, tree, min, max, unknownAsOccupied);
     //This computes the distance map 
-    distmap->update(); 
+    distmap->update();
+
+    // Set Level Bounds
+    // Construct the robot state space in which we're planning. We're
+    // planning in (TODO CHANGE as we change the part below) [min, max]x[min, max]x[min, max], a subset of R^3.
+    space_ = std::make_shared<ob::RealVectorStateSpace>(3);
+
+    // Set the bounds of space to be in [min, max] of the passed octomap.
+    ompl::base::RealVectorBounds bounds(3);
+
+    tree->getMetricMin(x, y, z);
+    // std::cout<<"Metric min: "<<x<<","<<y<<","<<z<<std::endl;
+    bounds.setLow(0, x);
+    bounds.setLow(1, y);
+    bounds.setLow(2, z);
+
+    tree->getMetricMax(x, y, z);
+    // std::cout<<"Metric max: "<<x<<","<<y<<","<<z<<std::endl;
+    bounds.setHigh(0, x);
+    bounds.setHigh(1, y);
+    bounds.setHigh(2, z);
+
+    space_->setBounds(bounds);
+
+    // Construct a space information instance for this state space
+    si_ = std::make_shared<ob::SpaceInformation>(space_);
+
+    // Set the object used to check which states in the space are valid
+    si_->setStateValidityChecker(std::make_shared<ValidityChecker>(si_, distmap));
+    si_->setMotionValidator(std::make_shared<LocalMotionValidator>(si_, tree));
+    si_->setup();
 }
 
 OctomapPathPlanner::~OctomapPathPlanner() {
@@ -211,63 +240,32 @@ void OctomapPathPlanner::plan(const geometry_msgs::Point &goal_pos)
     // Used to determine planing duration
     auto start_time = std::chrono::high_resolution_clock::now();
 
-    // Construct the robot state space in which we're planning. We're
-    // planning in (TODO CHANGE as we change the part below) [min, max]x[min, max]x[min, max], a subset of R^3.
-    auto space(std::make_shared<ob::RealVectorStateSpace>(3));
-
-    // Set the bounds of space to be in [min, max] of the passed octomap.
-    ompl::base::RealVectorBounds bounds(3);
-    double x, y, z;
-
-    tree->getMetricMin(x, y, z);
-    // std::cout<<"Metric min: "<<x<<","<<y<<","<<z<<std::endl;
-    bounds.setLow(0, x);
-    bounds.setLow(1, y);
-    bounds.setLow(2, z);
-    
-    tree->getMetricMax(x, y, z);
-    // std::cout<<"Metric max: "<<x<<","<<y<<","<<z<<std::endl;
-    bounds.setHigh(0, x);
-    bounds.setHigh(1, y);
-    bounds.setHigh(2, z);
-
-    space->setBounds(bounds);
-
-
-    // Construct a space information instance for this state space
-    auto si(std::make_shared<ob::SpaceInformation>(space));
-
-    // Set the object used to check which states in the space are valid
-    si->setStateValidityChecker(std::make_shared<ValidityChecker>(si, distmap));
-    si->setMotionValidator(std::make_shared<LocalMotionValidator>(si, tree));
-    si->setup();
-
     // Set our robot's starting state to be the bottom-left corner of
     // the environment, or [0, 0, 0], if not specified by the user.
-    ob::ScopedState<> start(space);
+    ob::ScopedState<> start(space_);
     start->as<ob::RealVectorStateSpace::StateType>()->values[0] = current_position.x;
     start->as<ob::RealVectorStateSpace::StateType>()->values[1] = current_position.y;
     start->as<ob::RealVectorStateSpace::StateType>()->values[2] = current_position.z;
 
     // Set our robot's goal state to be the one entered by the user.
-    ob::ScopedState<> goal(space);
+    ob::ScopedState<> goal(space_);
     goal->as<ob::RealVectorStateSpace::StateType>()->values[0] = goal_pos.x;
     goal->as<ob::RealVectorStateSpace::StateType>()->values[1] = goal_pos.y;
     goal->as<ob::RealVectorStateSpace::StateType>()->values[2] = goal_pos.z;
 
     // Create a problem instance
-    auto pdef(std::make_shared<ob::ProblemDefinition>(si));
+    auto pdef(std::make_shared<ob::ProblemDefinition>(si_));
 
     // Set the start and goal states
     pdef->setStartAndGoalStates(start, goal);
 
     // Create the optimization objective specified by our command-line argument.
     // This helper function is simply a switch statement.
-    pdef->setOptimizationObjective(allocateObjective(si, objectiveType));
+    pdef->setOptimizationObjective(allocateObjective(si_, objectiveType));
 
     // Construct the optimal planner specified by our command line argument.
     // This helper function is simply a switch statement.
-    ob::PlannerPtr optimizingPlanner = allocatePlanner(si, plannerType);
+    ob::PlannerPtr optimizingPlanner = allocatePlanner(si_, plannerType);
 
     // Set the problem instance for our planner to solve
     optimizingPlanner->setProblemDefinition(pdef);
@@ -309,7 +307,7 @@ void OctomapPathPlanner::plan(const geometry_msgs::Point &goal_pos)
 
         p_last_traj_ompl =  std::static_pointer_cast<ompl::geometric::PathGeometric>(pdef->getSolutionPath());
 
-        simplifyPath(p_last_traj_ompl,20);
+        simplifyPath(p_last_traj_ompl,1);
 
         traj_planning_successful = true;
     } else {
@@ -398,27 +396,26 @@ void OctomapPathPlanner::simplifyPath(std::shared_ptr<ompl::geometric::PathGeome
     ROS_INFO_STREAM(
     "Simplification Started" 
     );
-    std::cout << "Simplification started." << std::endl;
-    ompl::base::OptimizationObjectivePtr obj(new ompl::base::PathLengthOptimizationObjective(si_));
-//    auto simplified = std::make_shared<ompl::geometric::PathGeometric>(ompl::geometric::PathGeometric(*path));
-    *p_simplified_ompl = *path;
 
+    ompl::base::OptimizationObjectivePtr obj(new ompl::base::PathLengthOptimizationObjective(si_));
+    auto simplified = std::make_shared<ompl::geometric::PathGeometric>(*path);
     ompl::geometric::PathSimplifier simplifier(si_, ompl::base::GoalPtr(), obj);
-    double snap_to_vertex = 0.025; //// 0.05 (less points) // 0.025 (quite good) // 0.01 (more points) // original value: 0.005
+    double snap_to_vertex = 0.05; //// 0.05 (less points) // 0.025 (quite good) // 0.01 (more points) // original value: 0.005
     double avg_costs = 0.0;
     ompl::base::Cost original_cost = path->cost(obj);
     for (int i = 0; i < runs; i++)
     {
-        simplifier.perturbPath(*p_simplified_ompl, 100, 100, 0.33, snap_to_vertex);
-        simplifier.shortcutPath(*p_simplified_ompl, 100, 100, 0.33, snap_to_vertex);
-        avg_costs += p_simplified_ompl->cost(obj).value();
+        simplifier.perturbPath(*simplified, 2.0, 100, 100, snap_to_vertex);
+        simplifier.shortcutPath(*simplified, 100, 100, 0.33, snap_to_vertex);
+        avg_costs += simplified->cost(obj).value();
     }
 
     /*Note: each pass of this smoother roughly duplicates the number of vertices, which
     strongly affects the runtime of the trajectory smoothing / generation routine which will
     be utilized in the next steps of this task. Performing only 1 pass of the BSpline smoother
     will provide a good trade-off between smoothness and runtime for the next part.*/
-    simplifier.smoothBSpline(*p_simplified_ompl, 1); // 1-2 passes
+    // simplifier.smoothBSpline(*simplified, 1); // 1-2 passes
+    p_simplified_ompl = simplified;
 
     avg_costs /= runs;
     printf("Average cost: %f, original cost: %f\n", avg_costs, original_cost.value());
