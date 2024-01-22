@@ -382,6 +382,7 @@ void OctomapPathPlanner::simplifyPath(std::shared_ptr<ompl::geometric::PathGeome
     std::cout << "Simplification started." << std::endl;
     ompl::base::OptimizationObjectivePtr obj(new ompl::base::PathLengthOptimizationObjective(si_));
 //    auto simplified = std::make_shared<ompl::geometric::PathGeometric>(ompl::geometric::PathGeometric(*path));
+    *p_simplified = *path;
 
     ompl::geometric::PathSimplifier simplifier(si_, ompl::base::GoalPtr(), obj);
     
