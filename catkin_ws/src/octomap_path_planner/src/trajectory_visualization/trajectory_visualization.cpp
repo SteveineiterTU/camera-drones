@@ -5,7 +5,9 @@ TrajectoryVisualization::TrajectoryVisualization(ros::NodeHandle &n, ros::NodeHa
     trajectory_sub = n.subscribe<mav_planning_msgs::PolynomialTrajectory4D>(
                 "/octomap_path_planner/planned_trajectory", 10,
                 &TrajectoryVisualization::trajectoryCallback, this);
-
+    trajectory_simple_sub = n.subscribe<mav_planning_msgs::PolynomialTrajectory4D>(
+                "/octomap_path_planner/simplified_trajectory", 10,
+                &TrajectoryVisualization::trajectoryCallback, this);
 
     // ROS publishers
     rviz_markers_white_publisher = pn.advertise<visualization_msgs::Marker>("trajectory_markers", 10, true);

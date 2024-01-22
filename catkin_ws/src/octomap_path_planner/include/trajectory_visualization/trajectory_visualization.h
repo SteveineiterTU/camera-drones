@@ -37,6 +37,8 @@ private:
 
     // ROS subscribers
     ros::Subscriber trajectory_sub;
+    ros::Subscriber trajectory_simple_sub;
+    
     void trajectoryCallback(const mav_planning_msgs::PolynomialTrajectory4D::ConstPtr &p_msg);
 
     // ROS publishers
