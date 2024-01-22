@@ -87,7 +87,7 @@ private:
     void plan(const geometry_msgs::Point &goal_pos);
     void commandTimerCallback(const ros::TimerEvent&);
     void processTrajectory();
-    void simplifyPath(std::vector<ompl::geometric::PathGeometric *> paths, int runs);
+    void simplifyPath(std::shared_ptr<ompl::geometric::PathGeometric> path, int runs);
 
     // ROS Topics
     ros::Subscriber current_position_sub;
@@ -101,6 +101,8 @@ private:
     geometry_msgs::Point current_position, goal_position;
     bool traj_planning_successful;
     std::shared_ptr<ompl::geometric::PathGeometric> p_last_traj_ompl;
+    std::shared_ptr<ompl::geometric::PathGeometric> p_simplified;
+    
     mav_planning_msgs::PolynomialTrajectory4D last_traj_msg;
     ros::Subscriber smooth_trajectory4d_sub;
     void smoothTrajectory4DCallback(const mav_planning_msgs::PolynomialTrajectory4D::ConstPtr& p_msg);

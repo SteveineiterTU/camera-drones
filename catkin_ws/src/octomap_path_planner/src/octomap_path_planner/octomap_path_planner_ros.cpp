@@ -289,6 +289,9 @@ void OctomapPathPlanner::plan(const geometry_msgs::Point &goal_pos)
         }
 
         p_last_traj_ompl =  std::static_pointer_cast<ompl::geometric::PathGeometric>(pdef->getSolutionPath());
+
+        simplifyPath(p_last_traj_ompl,20);
+
         traj_planning_successful = true;
     } else {
         std::cout << "No solution found." << std::endl;
@@ -371,22 +374,26 @@ void OctomapPathPlanner::commandTimerCallback(const ros::TimerEvent&) {
   }
 }
 
-void OctomapPathPlanner::simplifyPath(std::vector<ompl::geometric::PathGeometric *> paths, int runs=20)
+void OctomapPathPlanner::simplifyPath(std::shared_ptr<ompl::geometric::PathGeometric> path, int runs=20)
 {
+    ROS_INFO_STREAM(
+    "Simplification Started" 
+    );
+    std::cout << "Simplification started." << std::endl;
     ompl::base::OptimizationObjectivePtr obj(new ompl::base::PathLengthOptimizationObjective(si_));
+//    auto simplified = std::make_shared<ompl::geometric::PathGeometric>(ompl::geometric::PathGeometric(*path));
+
     ompl::geometric::PathSimplifier simplifier(si_, ompl::base::GoalPtr(), obj);
-    for (int path_idx = 0; path_idx < 2; path_idx++)
+    
+    double avg_costs = 0.0;
+    ompl::base::Cost original_cost = path->cost(obj);
+    for (int i = 0; i < runs; i++)
     {
-        double avg_costs = 0.0;
-        ompl::base::Cost original_cost = paths[path_idx]->cost(obj);
-        ompl::geometric::PathGeometric *path;
-        for (int i = 0; i < runs; i++)
-        {
-            path = new ompl::geometric::PathGeometric(*paths[path_idx]);
-            simplifier.shortcutPath(*path, 100, 100, 0.33, 0.005);
-            avg_costs += path->cost(obj).value();
-        }
-        avg_costs /= runs;
-        printf("Average cost: %f, original cost: %f\n", avg_costs, original_cost.value());
+        simplifier.shortcutPath(*p_simplified, 100, 100, 0.33, 0.005);
+        avg_costs += p_simplified->cost(obj).value();
     }
+
+    avg_costs /= runs;
+    printf("Average cost: %f, original cost: %f\n", avg_costs, original_cost.value());
+
 }
